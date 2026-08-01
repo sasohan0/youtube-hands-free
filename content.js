@@ -15,82 +15,97 @@ let lastQualityCheck = 0;
 let lastTheaterCheck = 0;
 let recognition = null;
 
-// 1. Sync Settings with Storage
-chrome.storage.local.get(
-  {
-    isSkipperEnabled: true,
-    isFairPlayEnabled: false,
-    isFastForwardEnabled: true,
-    isVoiceControlEnabled: false,
-    isUpcomingAlertEnabled: true,
-    isHighBitrateEnabled: true,
-    isAutoTheaterEnabled: false,
-    isAntiDistractionEnabled: true,
-    isSpeedScrollEnabled: true,
-  },
-  (res) => {
-    settings = res;
-    toggleVoiceEngine(settings.isVoiceControlEnabled);
-    toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
-  },
-);
+// Helper: Check if Extension Context is valid
+function isContextValid() {
+  return typeof chrome !== "undefined" && chrome.runtime && !!chrome.runtime.id;
+}
 
-chrome.storage.onChanged.addListener((changes) => {
-  if (changes.isSkipperEnabled)
-    settings.isSkipperEnabled = changes.isSkipperEnabled.newValue;
-  if (changes.isFairPlayEnabled)
-    settings.isFairPlayEnabled = changes.isFairPlayEnabled.newValue;
-  if (changes.isFastForwardEnabled)
-    settings.isFastForwardEnabled = changes.isFastForwardEnabled.newValue;
-  if (changes.isUpcomingAlertEnabled)
-    settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
-  if (changes.isHighBitrateEnabled)
-    settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
-  if (changes.isAutoTheaterEnabled) {
-    settings.isAutoTheaterEnabled = changes.isAutoTheaterEnabled.newValue;
-    if (settings.isAutoTheaterEnabled) lastTheaterCheck = 0;
-  }
-  if (changes.isSpeedScrollEnabled)
-    settings.isSpeedScrollEnabled = changes.isSpeedScrollEnabled.newValue;
-  if (changes.isAntiDistractionEnabled) {
-    settings.isAntiDistractionEnabled = changes.isAntiDistractionEnabled.newValue;
-    toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
-  }
-  if (changes.isVoiceControlEnabled) {
-    settings.isVoiceControlEnabled = changes.isVoiceControlEnabled.newValue;
-    toggleVoiceEngine(settings.isVoiceControlEnabled);
-  }
-});
+// 1. Sync Settings with Storage
+if (isContextValid()) {
+  try {
+    chrome.storage.local.get(
+      {
+        isSkipperEnabled: true,
+        isFairPlayEnabled: false,
+        isFastForwardEnabled: true,
+        isVoiceControlEnabled: false,
+        isUpcomingAlertEnabled: true,
+        isHighBitrateEnabled: true,
+        isAutoTheaterEnabled: false,
+        isAntiDistractionEnabled: true,
+        isSpeedScrollEnabled: true,
+      },
+      (res) => {
+        if (!isContextValid()) return;
+        settings = res;
+        toggleVoiceEngine(settings.isVoiceControlEnabled);
+        toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
+      },
+    );
+
+    chrome.storage.onChanged.addListener((changes) => {
+      if (!isContextValid()) return;
+      if (changes.isSkipperEnabled)
+        settings.isSkipperEnabled = changes.isSkipperEnabled.newValue;
+      if (changes.isFairPlayEnabled)
+        settings.isFairPlayEnabled = changes.isFairPlayEnabled.newValue;
+      if (changes.isFastForwardEnabled)
+        settings.isFastForwardEnabled = changes.isFastForwardEnabled.newValue;
+      if (changes.isUpcomingAlertEnabled)
+        settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
+      if (changes.isHighBitrateEnabled)
+        settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
+      if (changes.isAutoTheaterEnabled) {
+        settings.isAutoTheaterEnabled = changes.isAutoTheaterEnabled.newValue;
+        if (settings.isAutoTheaterEnabled) lastTheaterCheck = 0;
+      }
+      if (changes.isSpeedScrollEnabled)
+        settings.isSpeedScrollEnabled = changes.isSpeedScrollEnabled.newValue;
+      if (changes.isAntiDistractionEnabled) {
+        settings.isAntiDistractionEnabled = changes.isAntiDistractionEnabled.newValue;
+        toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
+      }
+      if (changes.isVoiceControlEnabled) {
+        settings.isVoiceControlEnabled = changes.isVoiceControlEnabled.newValue;
+        toggleVoiceEngine(settings.isVoiceControlEnabled);
+      }
+    });
+  } catch (e) {}
+}
 
 // 2. History Logger
 function logSkipHistory() {
+  if (!isContextValid()) return;
   if (Date.now() - lastLogTime > 3000) {
     lastLogTime = Date.now();
     const cleanTitle = (document.title || "Unknown")
       .replace(/^\(\d+\)\s*/, "")
       .replace(" - YouTube", "");
-    chrome.storage.local.get(
-      { skipCount: 0, skipHistory: [], timeSavedSeconds: 0 },
-      (data) => {
-        const history = [
-          {
-            title: cleanTitle,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            }),
-          },
-          ...data.skipHistory,
-        ].slice(0, 5);
+    try {
+      chrome.storage.local.get(
+        { skipCount: 0, skipHistory: [], timeSavedSeconds: 0 },
+        (data) => {
+          if (!isContextValid()) return;
+          const history = [
+            {
+              title: cleanTitle,
+              time: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              }),
+            },
+            ...data.skipHistory,
+          ].slice(0, 5);
 
-        chrome.storage.local.set({
-          skipCount: data.skipCount + 1,
-          timeSavedSeconds: data.timeSavedSeconds + 15,
-          skipHistory: history,
-        });
-      },
-    );
+          chrome.storage.local.set({
+            skipCount: data.skipCount + 1,
+            timeSavedSeconds: data.timeSavedSeconds + 15,
+            skipHistory: history,
+          });
+        },
+      );
+    } catch (e) {}
   }
 }
 
@@ -114,7 +129,11 @@ function predictVideoAds() {
     else if (mins > 2) predictedCount = 1;
   }
 
-  chrome.storage.local.set({ predictedAdCount: predictedCount });
+  if (isContextValid()) {
+    try {
+      chrome.storage.local.set({ predictedAdCount: predictedCount });
+    } catch (e) {}
+  }
   return markers;
 }
 
@@ -204,7 +223,6 @@ function enforceEnhancedBitrate() {
 
   const player = document.querySelector("#movie_player, .html5-video-player");
 
-  // A. Unlock via HTML5 Player API
   if (player) {
     try {
       if (typeof player.getAvailableQualityLevels === "function") {
@@ -231,7 +249,6 @@ function enforceEnhancedBitrate() {
     } catch (e) {}
   }
 
-  // B. Auto-Select "1080p Premium (Enhanced Bitrate)" in YouTube Menu if present
   try {
     const menuItems = document.querySelectorAll(
       ".ytp-panel-menu .ytp-menuitem, .ytp-quality-menu .ytp-menuitem",
@@ -318,8 +335,10 @@ window.addEventListener(
   { capture: true, passive: false },
 );
 
-// 9. Main Loop
+// 9. Main Engine Interval Loop (Guarded against extension context invalidation)
 setInterval(() => {
+  if (!isContextValid()) return;
+
   predictVideoAds();
   checkUpcomingAds();
   enforceEnhancedBitrate();
@@ -359,11 +378,15 @@ setInterval(() => {
       const clickX = Math.round(rect.left + rect.width / 2);
       const clickY = Math.round(rect.top + rect.height / 2);
 
-      chrome.runtime.sendMessage({
-        action: "hardware_click",
-        x: clickX,
-        y: clickY,
-      });
+      if (isContextValid()) {
+        try {
+          chrome.runtime.sendMessage({
+            action: "hardware_click",
+            x: clickX,
+            y: clickY,
+          });
+        } catch (e) {}
+      }
 
       logSkipHistory();
 
@@ -406,7 +429,7 @@ function toggleVoiceEngine(enable) {
       };
 
       recognition.onend = () => {
-        if (settings.isVoiceControlEnabled && recognition) {
+        if (settings.isVoiceControlEnabled && recognition && isContextValid()) {
           try {
             recognition.start();
           } catch (e) {}
@@ -414,7 +437,7 @@ function toggleVoiceEngine(enable) {
       };
 
       recognition.onerror = () => {
-        if (settings.isVoiceControlEnabled && recognition) {
+        if (settings.isVoiceControlEnabled && recognition && isContextValid()) {
           setTimeout(() => {
             try {
               recognition.start();

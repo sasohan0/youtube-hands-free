@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const masterToggle = document.getElementById("masterToggle");
+  const fairPlayToggle = document.getElementById("fairPlayToggle");
   const ffToggle = document.getElementById("fastForwardToggle");
   const voiceToggle = document.getElementById("voiceToggle");
   const upcomingAdToggle = document.getElementById("upcomingAdToggle");
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(
     {
       isSkipperEnabled: true,
+      isFairPlayEnabled: false,
       isFastForwardEnabled: true,
       isVoiceControlEnabled: false,
       isUpcomingAlertEnabled: true,
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     (result) => {
       masterToggle.checked = result.isSkipperEnabled;
+      fairPlayToggle.checked = result.isFairPlayEnabled;
       ffToggle.checked = result.isFastForwardEnabled;
       voiceToggle.checked = result.isVoiceControlEnabled;
       upcomingAdToggle.checked = result.isUpcomingAlertEnabled;
@@ -41,7 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
       speedScrollToggle.checked = result.isSpeedScrollEnabled;
 
       applyTheme(result.selectedTheme);
-      updateStatusText(result.isSkipperEnabled, result.isVoiceControlEnabled);
+      updateStatusText(
+        result.isSkipperEnabled,
+        result.isVoiceControlEnabled,
+        result.isFairPlayEnabled,
+      );
       renderMetrics(result.predictedAdCount, result.timeSavedSeconds);
     },
   );
@@ -50,7 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
   masterToggle.addEventListener("change", () => {
     const isEnabled = masterToggle.checked;
     chrome.storage.local.set({ isSkipperEnabled: isEnabled });
-    updateStatusText(isEnabled, voiceToggle.checked);
+    updateStatusText(
+      isEnabled,
+      voiceToggle.checked,
+      fairPlayToggle.checked,
+    );
+  });
+
+  fairPlayToggle.addEventListener("change", () => {
+    const isFair = fairPlayToggle.checked;
+    chrome.storage.local.set({ isFairPlayEnabled: isFair });
+    updateStatusText(
+      masterToggle.checked,
+      voiceToggle.checked,
+      isFair,
+    );
   });
 
   ffToggle.addEventListener("change", () => {
@@ -60,7 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
   voiceToggle.addEventListener("change", () => {
     const isVoice = voiceToggle.checked;
     chrome.storage.local.set({ isVoiceControlEnabled: isVoice });
-    updateStatusText(masterToggle.checked, isVoice);
+    updateStatusText(
+      masterToggle.checked,
+      isVoice,
+      fairPlayToggle.checked,
+    );
   });
 
   upcomingAdToggle.addEventListener("change", () => {
@@ -126,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateStatusText(skipper, voice) {
+  function updateStatusText(skipper, voice, fairPlay) {
     if (!skipper) {
       statusText.textContent = "Engine Paused";
       statusText.parentElement.style.borderColor = "rgba(239, 68, 68, 0.3)";
@@ -135,6 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelector(".status-pulse").style.backgroundColor = "#ef4444";
       document.querySelector(".status-pulse").style.boxShadow =
         "0 0 10px #ef4444";
+    } else if (fairPlay) {
+      statusText.textContent = "🤝 Creator Fair-Play Active (5s Wait)";
+      statusText.parentElement.style.borderColor = "rgba(245, 158, 11, 0.3)";
+      statusText.parentElement.style.color = "#f59e0b";
+      statusText.parentElement.style.background = "rgba(245, 158, 11, 0.08)";
+      document.querySelector(".status-pulse").style.backgroundColor = "#f59e0b";
+      document.querySelector(".status-pulse").style.boxShadow =
+        "0 0 10px #f59e0b";
     } else if (voice) {
       statusText.textContent = "🎤 Hardware & Voice Active";
       statusText.parentElement.style.borderColor = "rgba(168, 85, 247, 0.3)";

@@ -1,5 +1,6 @@
 let settings = {
   isSkipperEnabled: true,
+  isFairPlayEnabled: false,
   isFastForwardEnabled: true,
   isVoiceControlEnabled: false,
   isUpcomingAlertEnabled: true,
@@ -18,6 +19,7 @@ let recognition = null;
 chrome.storage.local.get(
   {
     isSkipperEnabled: true,
+    isFairPlayEnabled: false,
     isFastForwardEnabled: true,
     isVoiceControlEnabled: false,
     isUpcomingAlertEnabled: true,
@@ -36,6 +38,8 @@ chrome.storage.local.get(
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.isSkipperEnabled)
     settings.isSkipperEnabled = changes.isSkipperEnabled.newValue;
+  if (changes.isFairPlayEnabled)
+    settings.isFairPlayEnabled = changes.isFairPlayEnabled.newValue;
   if (changes.isFastForwardEnabled)
     settings.isFastForwardEnabled = changes.isFastForwardEnabled.newValue;
   if (changes.isUpcomingAlertEnabled)
@@ -268,7 +272,7 @@ document.addEventListener("wheel", (e) => {
   showVoiceToast(`Speed: ${video.playbackRate}x ⚡`);
 }, { passive: false });
 
-// 9. Main Execution Loop for Ad Skipping & Monitoring
+// 9. Main Execution Loop for Ad Skipping & Monitoring (Includes Fair-Play Safeguard)
 setInterval(() => {
   predictVideoAds();
   checkUpcomingAds();
@@ -293,25 +297,37 @@ setInterval(() => {
     }
   }
 
-  // --- FEATURE B: Hardware Skip Button Clicker ---
+  // --- FEATURE B: Hardware Skip Button Clicker + Fair Play Safeguard ---
   if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
-    skipBtn.dataset.clicked = "true";
+    if (!skipBtn.dataset.firstSeen) {
+      skipBtn.dataset.firstSeen = Date.now();
+    }
 
-    const rect = skipBtn.getBoundingClientRect();
-    const clickX = Math.round(rect.left + rect.width / 2);
-    const clickY = Math.round(rect.top + rect.height / 2);
+    const elapsed = Date.now() - parseInt(skipBtn.dataset.firstSeen);
+    const waitRequired = settings.isFairPlayEnabled ? 5000 : 0;
 
-    chrome.runtime.sendMessage({
-      action: "hardware_click",
-      x: clickX,
-      y: clickY,
-    });
+    if (elapsed >= waitRequired) {
+      skipBtn.dataset.clicked = "true";
 
-    logSkipHistory();
+      const rect = skipBtn.getBoundingClientRect();
+      const clickX = Math.round(rect.left + rect.width / 2);
+      const clickY = Math.round(rect.top + rect.height / 2);
 
-    setTimeout(() => {
-      if (skipBtn) skipBtn.dataset.clicked = "";
-    }, 2000);
+      chrome.runtime.sendMessage({
+        action: "hardware_click",
+        x: clickX,
+        y: clickY,
+      });
+
+      logSkipHistory();
+
+      setTimeout(() => {
+        if (skipBtn) {
+          skipBtn.dataset.clicked = "";
+          skipBtn.dataset.firstSeen = "";
+        }
+      }, 2000);
+    }
   }
 
   // --- FEATURE C: Standard Banner & Overlay Closer ---

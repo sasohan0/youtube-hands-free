@@ -3,17 +3,17 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Hardware CDP, AI Voice, 4K Lock, Auto-Theater & Anti-Distraction Suite
+### Hardware CDP, AI Voice, 4K Lock, Creator Fair-Play & Safety Suite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25_Local-green.svg)](PRIVACY.md)
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, **Auto-Theater Mode**, **Anti-Distraction Mode**, and a **Raycast Designer Motion Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, a **Creator Fair-Play Safeguard Mode**, and a **Raycast Designer Motion Icon Engine**.
 
-[Features](#-key-features) • [Power Tools Suite](#-cinema--power-tools-suite) • [Raycast Motion Icon](#-raycastlinear-designer-motion-icon) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
+[Features](#-key-features) • [Creator Fair-Play Mode](#-creator-fair-play-mode) • [Safety & Privacy Safeguards](#-safety--privacy-safeguards) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
 </div>
 
@@ -23,14 +23,16 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Power Tools (Auto-Theater, Anti-Distraction, Speed Scroll), 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Creator Fair-Play Mode, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
+- 🤝 **Creator Fair-Play Safeguard Mode**: Optionally waits 5 seconds before skipping ads to ensure video creators receive YouTube ad impression revenue credit.
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
+- 🔒 **100% Local Privacy Guarantee**: Zero remote telemetry, zero analytics tracking, and zero data collection. All settings stay in your browser.
 - 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🎭 **Auto-Theater Mode**: Automatically expands YouTube player into full Cinema / Theater Mode when a video starts playing.
 - 🛡️ **Anti-Distraction Suite**: Automatically suppresses YouTube Shorts shelves, Premium upgrade popups, and promotional survey banners.
@@ -44,13 +46,21 @@
 
 ---
 
-## 🎭 Cinema & Power Tools Suite
+## 🤝 Creator Fair-Play Mode
 
-| Power Feature | Behavior | Benefit |
-| :--- | :--- | :--- |
-| **Auto Theater Mode** | Clicks `.ytp-size-button` on video load | Immersive full-width cinema experience |
-| **Anti-Distraction Mode** | Blocks Shorts shelves & Premium nag popups | Clean, focused YouTube browsing |
-| **Shift + Scroll Speed** | `Shift + Wheel` over video player | Instant fine-tuned speed control (`0.25x` - `4.0x`) |
+We love content creators! YouTube Hands Free includes a dedicated **Creator Fair-Play Mode**:
+- When enabled in the popup control center, the extension waits **5 full seconds** after YouTube renders a skip button before auto-clicking.
+- This 5-second window satisfies YouTube's creator ad view threshold, ensuring your favorite creators get paid for ad views while giving you a completely hands-free viewing experience.
+
+---
+
+## 🔒 Safety & Privacy Safeguards
+
+Detailed documentation is available in [`PRIVACY.md`](PRIVACY.md).
+
+- **Zero Tracking**: No remote network calls, no analytics, no user tracking.
+- **Minimal CDP Scoping**: Chrome DevTools Protocol (`chrome.debugger`) attaches for < 50ms solely to dispatch left-click coordinates on YouTube skip buttons, detaching immediately.
+- **Open Source Transparency**: 100% auditable open-source code under the MIT License.
 
 ---
 
@@ -92,13 +102,13 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 4. **Reload Unpacked Extension**:
    - Click **Load unpacked** (or click the **Reload ↺** refresh icon on the `YouTube Hands Free` card).
 
-5. **Enjoy Power-Packed 4K Hands-Free YouTube!** 🎉
+5. **Enjoy Fair, Safe, and Hands-Free 4K YouTube Streaming!** 🎉
 
 ---
 
-## 📜 License
+## 📜 License & Privacy
 
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) and [`PRIVACY.md`](PRIVACY.md) for more details.
 
 ---
 

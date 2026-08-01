@@ -20,9 +20,9 @@
             <div class="header-text">
                 <div class="title-row">
                     <h1>YouTube Hands Free</h1>
-                    <span class="badge-v3">v1.4 Max</span>
+                    <span class="badge-v3">v1.4 Safe</span>
                 </div>
-                <span class="header-subtitle">Hardware CDP, Voice & Power Tools</span>
+                <span class="header-subtitle">Hardware CDP, Voice & Creator Fair-Play</span>
             </div>
         </header>
 
@@ -58,6 +58,20 @@
                 </div>
                 <label class="switch">
                     <input type="checkbox" id="masterToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">
+                        Creator Fair-Play Mode
+                        <span class="pro-tag">Fair</span>
+                    </span>
+                    <span class="toggle-desc">Wait 5s to credit video creators</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="fairPlayToggle">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -174,6 +188,11 @@
                 <ul id="historyList"></ul>
             </div>
         </div>
+
+        <!-- Privacy & Safety Guarantee Disclosure Footer -->
+        <footer class="privacy-footer">
+            <span>🛡️ 100% Private & Safe • Zero Data Collection</span>
+        </footer>
     </div>
     <script src="popup.js"></script>
 </body>

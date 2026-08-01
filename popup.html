@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-box">
+                <div class="logo-icon"></div>
+            </div>
+            <div class="header-text">
+                <h1>Youtube Hands Free</h1>
+                <span>Hardware Edition</span>
+            </div>
+        </header>
+
+        <div class="toggles-wrapper">
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">Master Switch</span>
+                    <span class="toggle-desc">Enable hardware ad skipping</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="masterToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">Aggressive Fast-Forward</span>
+                    <span class="toggle-desc">Speed through unskippable ads</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="fastForwardToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-header">
+                <div class="total-skipped">Total Skipped: <span id="totalSkipped">0</span></div>
+                <button id="clearBtn">Clear</button>
+            </div>
+            <div class="history-container">
+                <ul id="historyList"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Vibing Headphone Emoji Motion Icon, Hardware CDP, AI Voice & 4K Engine
+### Cyberpunk Visor Emoji Motion Icon, Hardware CDP, AI Voice & 4K Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,9 +11,9 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Vibing Headphone Emoji Motion Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Cyberpunk Visor Emoji Motion-Graphics Toolbar Icon Engine**.
 
-[Features](#-key-features) • [Vibing Motion Icon](#-vibing-headphone-emoji-motion-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
+[Features](#-key-features) • [Cyberpunk Motion Icon](#-cyberpunk-visor-emoji-motion-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
 </div>
 
@@ -23,14 +23,14 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Vibing Headphone Emoji Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Cyberpunk Visor Emoji Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
-- 🎧 **Vibing Headphone Emoji Motion Icon Engine**: Live morphing transparent icon engine in the Chrome extension toolbar. Dynamically cycles between **Floating Skip Button** (⏭️), **Hand Tapping Skip Button with Shockwave** (👆⏭️), and **Vibing Smiling Headphone Emoji** (🎧😌🎵).
+- 🕶️ **Cyberpunk Visor Emoji Motion Icon Engine**: Live morphing transparent icon engine in the Chrome extension toolbar. Dynamically cycles between **Modern Gray-Black Skip Button** (⏭️), **Cyber Hand Tapping Gray-Black Skip** (👆⏭️), and **Vibing Cyberpunk Visor Emoji** (🎧😎).
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
 - 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
@@ -42,19 +42,19 @@
 
 ---
 
-## 🎧 Vibing Headphone Emoji Motion Icon
+## 🕶️ Cyberpunk Visor Emoji Motion Icon
 
 The extension toolbar icon dynamically morphs between 3 custom animated scenes on a **100% transparent background**:
 
 ```text
-  [Scene 1: Floating Skip]       [Scene 2: Hand Tapping Skip]      [Scene 3: Vibing Emoji]
-   ⏭️ Floating Skip Pill          👆 Hand Finger Tapping Skip        🎧😌 Headphone Emoji
-   neon pink & white arrows        gold finger + click ripple        bobbing head + closed eyes & smile
+  [Scene 1: Modern Gray-Black Skip]   [Scene 2: Cyber Hand Tap]         [Scene 3: Cyberpunk Emoji]
+   ⏭️ Gray-Black Pill (#161b26)        👆 Neon Cyan Finger Tap          🎧😎 Cyber Visor Glasses (#00F2FE)
+   crisp white arrows                  cyan shockwave ripple            magenta headphones & smile (#FF007F)
 ```
 
-1. **Floating Skip Button (⏭️)**: Smoothly hovers and floats up/down.
-2. **Hand Tapping Skip Button (👆⏭️)**: A gold hand finger taps down on the skip button generating click shockwave ripples.
-3. **Vibing Headphone Emoji (🎧😌🎵)**: Cute emoji with closed eyes and a happy smile bobbing to the music beat with neon cyan headphones.
+1. **Modern Gray-Black Skip Button (⏭️)**: Dark gray-black `#161b26` pill with `#334155` border and crisp white arrows.
+2. **Cyber Hand Tapping Gray-Black Skip (👆⏭️)**: A neon cyan cyber finger taps down on the gray-black skip button generating click shockwave ripples.
+3. **Vibing Cyberpunk Emoji (🎧😎)**: Dark obsidian emoji with glowing neon cyan visor glasses, magenta headphones, and a neon smile bobbing to the music beat.
 
 ---
 
@@ -102,7 +102,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 4. **Reload Unpacked Extension**:
    - Click **Load unpacked** (or click the **Reload ↺** refresh icon on the `YouTube Hands Free` card).
 
-5. **Enjoy Live Vibing 4K Hands-Free YouTube!** 🎉
+5. **Enjoy Live Cyberpunk 4K Hands-Free YouTube!** 🎉
 
 ---
 

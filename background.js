@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // Show temporary SKIP badge on animated extension icon
     chrome.action.setBadgeText({ text: "SKIP" });
-    chrome.action.setBadgeBackgroundColor({ color: "#FF0050" });
+    chrome.action.setBadgeBackgroundColor({ color: "#00F2FE" });
     setTimeout(() => {
       chrome.action.setBadgeText({ text: "" });
     }, 1800);
@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Custom Vibing & Hand-Tapping Animated Toolbar Icon Engine
-function renderVibingHandsFreeIcon() {
+// 2. Cyberpunk Animated Motion Toolbar Icon Engine
+function renderCyberpunkMotionIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -64,13 +64,15 @@ function renderVibingHandsFreeIcon() {
     const cycle = Math.floor(frame / 30) % 3; // Morph between 3 custom scenes
 
     if (cycle === 0) {
-      // SCENE 1: Floating Skip Button (⏭️)
+      // SCENE 1: Floating Modern Gray-Black Skip Button (⏭️)
       const floatY = Math.sin(time * 4) * 2;
       ctx.save();
       ctx.translate(16, 16 + floatY);
 
-      // Skip Button Pill Container
-      ctx.fillStyle = "#FF0050";
+      // Modern Gray-Black Pill Container
+      ctx.fillStyle = "#161b26";
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
         ctx.roundRect(-13, -8, 26, 16, 5);
@@ -78,8 +80,9 @@ function renderVibingHandsFreeIcon() {
         ctx.rect(-13, -8, 26, 16);
       }
       ctx.fill();
+      ctx.stroke();
 
-      // Skip Icon Arrows (⏭)
+      // Crisp White Skip Arrows (⏭)
       ctx.fillStyle = "#FFFFFF";
 
       ctx.beginPath();
@@ -100,13 +103,15 @@ function renderVibingHandsFreeIcon() {
 
       ctx.restore();
     } else if (cycle === 1) {
-      // SCENE 2: Hand Tapping the Skip Button 👆⏭️
+      // SCENE 2: Cyber Hand Tapping Modern Gray-Black Skip Button 👆⏭️
       const tapOffset = Math.sin(time * 8) > 0 ? 2 : 0;
       ctx.save();
       ctx.translate(16, 16);
 
-      // Skip Button Base
-      ctx.fillStyle = "rgba(255, 0, 80, 0.9)";
+      // Modern Gray-Black Skip Button Base
+      ctx.fillStyle = "#161b26";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
         ctx.roundRect(-12, -10, 24, 14, 4);
@@ -114,6 +119,7 @@ function renderVibingHandsFreeIcon() {
         ctx.rect(-12, -10, 24, 14);
       }
       ctx.fill();
+      ctx.stroke();
 
       // Skip Arrow Icon
       ctx.fillStyle = "#FFFFFF";
@@ -125,8 +131,8 @@ function renderVibingHandsFreeIcon() {
       ctx.fill();
       ctx.fillRect(3, -7, 2, 8);
 
-      // Floating Hand Tapping Finger 👆
-      ctx.fillStyle = "#F59E0B";
+      // Cyber Metallic Hand Finger Tapping
+      ctx.fillStyle = "#00F2FE"; // Neon Cyan cyber finger
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
         ctx.roundRect(-2, -3 + tapOffset, 4, 12, 2);
@@ -137,7 +143,7 @@ function renderVibingHandsFreeIcon() {
 
       // Click Shockwave Ripple Ring
       if (tapOffset > 0) {
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+        ctx.strokeStyle = "rgba(0, 242, 254, 0.85)";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(0, -3, 6, 0, Math.PI * 2);
@@ -146,42 +152,46 @@ function renderVibingHandsFreeIcon() {
 
       ctx.restore();
     } else {
-      // SCENE 3: Vibing Emoji with Headphones, Closed Eyes & Smile 🎧😌🎵
+      // SCENE 3: Cyberpunk Vibing Emoji with Neon Visor & Headphones 🎧😎
       const headBob = Math.sin(time * 5) * 1.5;
       ctx.save();
       ctx.translate(16, 16 + headBob);
 
-      // Yellow Emoji Head
-      ctx.fillStyle = "#F59E0B";
+      // Dark Obsidian Emoji Face Base
+      ctx.fillStyle = "#0f172a";
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(0, 1, 9, 0, Math.PI * 2);
       ctx.fill();
-
-      // Closed Smiling Eyes (Arcs ^ ^)
-      ctx.strokeStyle = "#451a03";
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.arc(-4, -1, 2.5, Math.PI, 0);
       ctx.stroke();
 
+      // Neon Cyan Visor Glasses 😎
+      ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
-      ctx.arc(4, -1, 2.5, Math.PI, 0);
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(-7, -3, 14, 5, 2);
+      } else {
+        ctx.rect(-7, -3, 14, 5);
+      }
+      ctx.fill();
+
+      // Glowing Neon Magenta Smile Mouth
+      ctx.strokeStyle = "#FF007F";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 2, 4, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.stroke();
 
-      // Happy Smile Arc 😊
-      ctx.beginPath();
-      ctx.arc(0, 2, 4, 0.1 * Math.PI, 0.9 * Math.PI);
-      ctx.stroke();
-
-      // Neon Headphones Arc
-      ctx.strokeStyle = "#00F2FE";
-      ctx.lineWidth = 2;
+      // Neon Magenta Cyber Headphones Arc
+      ctx.strokeStyle = "#FF007F";
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
       ctx.arc(0, 0, 11, Math.PI * 0.9, Math.PI * 2.1);
       ctx.stroke();
 
-      // Headphone Ear Cups
-      ctx.fillStyle = "#FF0050";
+      // Cyber Ear Cups
+      ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
         ctx.roundRect(-12, -2, 3, 7, 1);
@@ -205,5 +215,5 @@ function renderVibingHandsFreeIcon() {
   } catch (e) {}
 }
 
-// 90ms Refresh Rate for smooth scene transitions
-setInterval(renderVibingHandsFreeIcon, 90);
+// 90ms Refresh Rate for smooth cyberpunk scene transitions
+setInterval(renderCyberpunkMotionIcon, 90);

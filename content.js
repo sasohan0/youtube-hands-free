@@ -5,8 +5,12 @@ let settings = {
   isVoiceControlEnabled: false,
   isUpcomingAlertEnabled: true,
   isHighBitrateEnabled: true,
+  isAudioBoostEnabled: false,
+  isScreenshotEnabled: true,
+  isPipEnabled: true,
+  sleepTimerMinutes: 0,
   isAutoTheaterEnabled: false,
-  isAntiDistractionEnabled: true,
+  isAntiDistractionEnabled: false,
   isSpeedScrollEnabled: true,
 };
 let lastLogTime = 0;
@@ -14,6 +18,11 @@ let lastAlertTime = 0;
 let lastQualityCheck = 0;
 let lastTheaterCheck = 0;
 let recognition = null;
+let audioCtx = null;
+let audioSource = null;
+let gainNode = null;
+let vocalFilter = null;
+let sleepTimerId = null;
 
 // Helper: Safely check if Extension Context is active
 function isContextValid() {
@@ -25,60 +34,151 @@ function isContextValid() {
 }
 
 // 1. Sync Settings with Storage
+function applyAllSettings() {
+  toggleVoiceEngine(settings.isVoiceControlEnabled);
+  toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
+  toggleAudioBooster(settings.isAudioBoostEnabled);
+  setupSleepTimer(settings.sleepTimerMinutes);
+}
+
 if (isContextValid()) {
   try {
-    chrome.storage.local.get(
-      {
-        isSkipperEnabled: true,
-        isFairPlayEnabled: false,
-        isFastForwardEnabled: true,
-        isVoiceControlEnabled: false,
-        isUpcomingAlertEnabled: true,
-        isHighBitrateEnabled: true,
-        isAutoTheaterEnabled: false,
-        isAntiDistractionEnabled: true,
-        isSpeedScrollEnabled: true,
-      },
-      (res) => {
-        if (chrome.runtime.lastError) return;
-        if (!isContextValid()) return;
-        settings = res;
-        toggleVoiceEngine(settings.isVoiceControlEnabled);
-        toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
-      },
-    );
+    chrome.storage.local.get(null, (res) => {
+      if (chrome.runtime.lastError) return;
+      if (!isContextValid()) return;
+      if (res) {
+        settings = { ...settings, ...res };
+        applyAllSettings();
+      }
+    });
 
     chrome.storage.onChanged.addListener((changes) => {
       if (!isContextValid()) return;
-      if (changes.isSkipperEnabled)
-        settings.isSkipperEnabled = changes.isSkipperEnabled.newValue;
-      if (changes.isFairPlayEnabled)
-        settings.isFairPlayEnabled = changes.isFairPlayEnabled.newValue;
-      if (changes.isFastForwardEnabled)
-        settings.isFastForwardEnabled = changes.isFastForwardEnabled.newValue;
-      if (changes.isUpcomingAlertEnabled)
-        settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
-      if (changes.isHighBitrateEnabled)
-        settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
-      if (changes.isAutoTheaterEnabled) {
-        settings.isAutoTheaterEnabled = changes.isAutoTheaterEnabled.newValue;
-        if (settings.isAutoTheaterEnabled) lastTheaterCheck = 0;
-      }
-      if (changes.isSpeedScrollEnabled)
-        settings.isSpeedScrollEnabled = changes.isSpeedScrollEnabled.newValue;
-      if (changes.isAntiDistractionEnabled) {
-        settings.isAntiDistractionEnabled = changes.isAntiDistractionEnabled.newValue;
-        toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
-      }
-      if (changes.isVoiceControlEnabled) {
-        settings.isVoiceControlEnabled = changes.isVoiceControlEnabled.newValue;
-        toggleVoiceEngine(settings.isVoiceControlEnabled);
-      }
+      try {
+        for (let key in changes) {
+          if (key in settings) {
+            settings[key] = changes[key].newValue;
+          }
+        }
+        applyAllSettings();
+        if (changes.isAutoTheaterEnabled && settings.isAutoTheaterEnabled) {
+          lastTheaterCheck = 0;
+        }
+      } catch (e) {}
     });
   } catch (e) {}
 }
 
-// 2. Upcoming Ad Alert Engine
+// 2. Web Audio Vocal Booster & EQ Engine (+6dB Vocal & Volume Boost)
+function toggleAudioBooster(enable) {
+  const video = document.querySelector("video");
+  if (!video) return;
+
+  try {
+    if (enable) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioSource = audioCtx.createMediaElementSource(video);
+        gainNode = audioCtx.createGain();
+        vocalFilter = audioCtx.createBiquadFilter();
+
+        vocalFilter.type = "peaking";
+        vocalFilter.frequency.value = 2000;
+        vocalFilter.Q.value = 1.0;
+        vocalFilter.gain.value = 6;
+
+        gainNode.gain.value = 1.35;
+
+        audioSource.connect(vocalFilter);
+        vocalFilter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    } else {
+      if (audioCtx && gainNode) {
+        gainNode.gain.value = 1.0;
+        if (vocalFilter) vocalFilter.gain.value = 0;
+      }
+    }
+  } catch (e) {}
+}
+
+// 3. Hotkey Listener (Clean 4K Screenshot: Alt+S | Picture-in-Picture: Alt+P)
+window.addEventListener(
+  "keydown",
+  (e) => {
+    if (!isContextValid()) return;
+
+    // A. Clean 4K Video Frame Screenshot (Alt + S)
+    if (e.altKey && (e.key === "s" || e.key === "S")) {
+      if (!settings.isScreenshotEnabled) return;
+      const video = document.querySelector("video");
+      if (!video || video.readyState < 2) return;
+
+      e.preventDefault();
+
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 1920;
+        canvas.height = video.videoHeight || 1080;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const cleanTitle = (document.title || "video")
+          .replace(/^\(\d+\)\s*/, "")
+          .replace(" - YouTube", "")
+          .replace(/[^a-z0-9]/gi, "_");
+        const timeStr = Math.floor(video.currentTime) + "s";
+
+        const link = document.createElement("a");
+        link.download = `YouTube_${cleanTitle}_${timeStr}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        showVoiceToast("Captured Clean 4K Frame Screenshot 📸");
+      } catch (err) {}
+    }
+
+    // B. Floating Picture-in-Picture Mode (Alt + P)
+    if (e.altKey && (e.key === "p" || e.key === "P")) {
+      if (!settings.isPipEnabled) return;
+      const video = document.querySelector("video");
+      if (!video) return;
+
+      e.preventDefault();
+      try {
+        if (document.pictureInPictureElement) {
+          document.exitPictureInPicture();
+          showVoiceToast("Exited Floating Window 📺");
+        } else {
+          video.requestPictureInPicture();
+          showVoiceToast("Floating Picture-in-Picture Mode 📺");
+        }
+      } catch (err) {}
+    }
+  },
+  { capture: true },
+);
+
+// 4. Hands-Free Sleep Timer Engine
+function setupSleepTimer(minutes) {
+  if (sleepTimerId) clearTimeout(sleepTimerId);
+  if (!minutes || minutes <= 0) return;
+
+  showVoiceToast(`Sleep Timer Set: ${minutes} Mins 💤`);
+
+  sleepTimerId = setTimeout(() => {
+    const video = document.querySelector("video");
+    if (video) {
+      video.pause();
+      showVoiceToast("Sleep Timer Ended: Video Paused 💤");
+    }
+  }, minutes * 60 * 1000);
+}
+
+// 5. Upcoming Ad Alert Engine
 function checkUpcomingAds() {
   if (!isContextValid()) return;
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
@@ -157,7 +257,7 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 3. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
+// 6. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
 function enforceEnhancedBitrate() {
   if (!isContextValid()) return;
   if (!settings.isHighBitrateEnabled) return;
@@ -210,7 +310,7 @@ function enforceEnhancedBitrate() {
   } catch (e) {}
 }
 
-// 4. Auto Theater Mode Engine
+// 7. Auto Theater Mode Engine
 function enforceAutoTheater() {
   if (!isContextValid()) return;
   if (!settings.isAutoTheaterEnabled) return;
@@ -236,7 +336,7 @@ function enforceAutoTheater() {
   }
 }
 
-// 5. Anti-Distraction Engine
+// 8. Anti-Distraction Engine
 function toggleAntiDistractionCSS(enable) {
   let styleEl = document.getElementById("yt-handsfree-antidistraction-style");
   if (enable) {
@@ -258,7 +358,7 @@ function toggleAntiDistractionCSS(enable) {
   }
 }
 
-// 6. Shift + Scroll Speed Controller
+// 9. Shift + Scroll Speed Controller
 window.addEventListener(
   "wheel",
   (e) => {
@@ -280,7 +380,7 @@ window.addEventListener(
   { capture: true, passive: false },
 );
 
-// 7. Main Engine Interval Loop (Proven Rock-Solid Fast-Forward & Skipper)
+// 10. Main Engine Interval Loop (Guarded against extension context invalidation)
 const mainInterval = setInterval(() => {
   if (!isContextValid()) {
     clearInterval(mainInterval);
@@ -314,7 +414,7 @@ const mainInterval = setInterval(() => {
       }
     }
 
-    // Feature B: Hardware & DOM Skip Button Clicker
+    // Feature B: Hardware Skip Button Clicker
     if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
       if (!skipBtn.dataset.firstSeen) {
         skipBtn.dataset.firstSeen = Date.now();
@@ -331,7 +431,6 @@ const mainInterval = setInterval(() => {
           skipBtn.click();
         } catch (e) {}
 
-        // Hardware CDP Click Simulation
         const rect = skipBtn.getBoundingClientRect();
         const clickX = Math.round(rect.left + rect.width / 2);
         const clickY = Math.round(rect.top + rect.height / 2);
@@ -362,7 +461,7 @@ const mainInterval = setInterval(() => {
   } catch (e) {}
 }, 300);
 
-// 8. Voice Recognition Engine
+// 11. Voice Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

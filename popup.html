@@ -20,9 +20,9 @@
             <div class="header-text">
                 <div class="title-row">
                     <h1>YouTube Hands Free</h1>
-                    <span class="badge-v3">v1.5 Ultra</span>
+                    <span class="badge-v3">v2.0 Pro</span>
                 </div>
-                <span class="header-subtitle">Hardware CDP, 1080p Premium & Voice</span>
+                <span class="header-subtitle">Hardware CDP, Audio Boost & Cinema Tools</span>
             </div>
         </header>
 
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <!-- Controls Section -->
+        <!-- Core Controls Section -->
         <div class="toggles-wrapper glass-card hover-shine">
             <div class="section-label">Core Ad Engine</div>
             
@@ -127,9 +127,64 @@
             </div>
         </div>
 
+        <!-- Pro Media & Audio Suite -->
+        <div class="toggles-wrapper glass-card hover-shine">
+            <div class="section-label">Pro Media & Audio Suite</div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">📸 Clean 4K Screenshot (Alt+S)</span>
+                    <span class="toggle-desc">Capture player frame without UI</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="screenshotToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">
+                        🎛️ Clear Vocal Audio Booster
+                        <span class="pro-tag">EQ</span>
+                    </span>
+                    <span class="toggle-desc">Boost speech clarity & volume (+6dB)</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="audioBoostToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">📺 Floating PiP Window (Alt+P)</span>
+                    <span class="toggle-desc">Pop-out video into floating window</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="pipToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row select-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">💤 Hands-Free Sleep Timer</span>
+                    <span class="toggle-desc">Auto-pause video after timer</span>
+                </div>
+                <select id="sleepTimerSelect" class="custom-select">
+                    <option value="0">Off</option>
+                    <option value="15">15 Mins</option>
+                    <option value="30">30 Mins</option>
+                    <option value="45">45 Mins</option>
+                    <option value="60">60 Mins</option>
+                </select>
+            </div>
+        </div>
+
         <!-- Power Features Section -->
         <div class="toggles-wrapper glass-card hover-shine">
-            <div class="section-label">Cinema & Power Tools</div>
+            <div class="section-label">Cinema & Navigation</div>
 
             <div class="toggle-row">
                 <div class="toggle-info">

@@ -20,9 +20,9 @@
             <div class="header-text">
                 <div class="title-row">
                     <h1>YouTube Hands Free</h1>
-                    <span class="badge-v3">v1.0 Pro</span>
+                    <span class="badge-v3">v1.2 AI</span>
                 </div>
-                <span class="header-subtitle">Hardware CDP & Voice Control</span>
+                <span class="header-subtitle">Hardware CDP, Voice & Ad Predictor</span>
             </div>
         </header>
 
@@ -32,8 +32,23 @@
             <span id="statusText">System Active & Listening</span>
         </div>
 
+        <!-- Predictor Dashboard Badge -->
+        <div class="predictor-card glass-card hover-shine">
+            <div class="predictor-row">
+                <div class="pred-item">
+                    <span class="pred-label">Predicted Ads</span>
+                    <span class="pred-value" id="predictedAdCount">~0 Ads</span>
+                </div>
+                <div class="divider-line"></div>
+                <div class="pred-item">
+                    <span class="pred-label">Est. Time Saved</span>
+                    <span class="pred-value highlight-green" id="timeSaved">0s</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Controls Section -->
-        <div class="toggles-wrapper glass-card">
+        <div class="toggles-wrapper glass-card hover-shine">
             <div class="section-label">Engine Controls</div>
             
             <div class="toggle-row">
@@ -61,20 +76,31 @@
             <div class="toggle-row">
                 <div class="toggle-info">
                     <span class="toggle-title">
-                        🎤 Voice Command Engine
-                        <span class="beta-tag">BETA</span>
+                        🎤 Voice Engine
+                        <span class="beta-tag">AI</span>
                     </span>
-                    <span class="toggle-desc">Hands-free speech recognition</span>
+                    <span class="toggle-desc">Hands-free speech commands</span>
                 </div>
                 <label class="switch">
                     <input type="checkbox" id="voiceToggle">
                     <span class="slider voice-slider"></span>
                 </label>
             </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">Upcoming Ad Alert</span>
+                    <span class="toggle-desc">HUD notification before ads</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="upcomingAdToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
 
         <!-- Theme Selector -->
-        <div class="theme-section glass-card">
+        <div class="theme-section glass-card hover-shine">
             <div class="section-label">Glass Theme Preset</div>
             <div class="theme-options">
                 <button class="theme-btn active" data-theme="neon">Neon Glass</button>
@@ -84,7 +110,7 @@
         </div>
 
         <!-- Stats Section -->
-        <div class="stats-section glass-card">
+        <div class="stats-section glass-card hover-shine">
             <div class="stats-header">
                 <div class="total-skipped">
                     <span class="stat-label">Total Skipped</span>

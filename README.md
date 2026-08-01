@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Hardware CDP, AI Voice, 4K Lock, Creator Fair-Play & Safety Suite
+### Hardware CDP, AI Voice, 1080p Premium Enhanced Bitrate & Power Tools
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,9 +11,9 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, a **Creator Fair-Play Safeguard Mode**, and a **Raycast Designer Motion Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **1080p Premium Enhanced Bitrate & 4K Stream Lock**, **Auto-Theater Mode**, **Anti-Distraction Mode**, and a **Raycast Designer Motion Icon Engine**.
 
-[Features](#-key-features) • [Creator Fair-Play Mode](#-creator-fair-play-mode) • [Safety & Privacy Safeguards](#-safety--privacy-safeguards) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
+[Features](#-key-features) • [1080p Premium Enhanced Bitrate](#-1080p-premium-enhanced-bitrate-unlocker) • [Creator Fair-Play Mode](#-creator-fair-play-mode) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
 </div>
 
@@ -23,17 +23,17 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Creator Fair-Play Mode, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with 1080p Premium Enhanced Bitrate Lock, Creator Fair-Play Mode, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
+- ⚡ **1080p Premium Enhanced Bitrate & 4K Lock**: Unlocks and forces YouTube's high-bitrate **1080p Premium (Enhanced bitrate)** video stream and 4K/60fps streams without requiring a YouTube Premium subscription.
 - 🤝 **Creator Fair-Play Safeguard Mode**: Optionally waits 5 seconds before skipping ads to ensure video creators receive YouTube ad impression revenue credit.
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
 - 🔒 **100% Local Privacy Guarantee**: Zero remote telemetry, zero analytics tracking, and zero data collection. All settings stay in your browser.
-- 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🎭 **Auto-Theater Mode**: Automatically expands YouTube player into full Cinema / Theater Mode when a video starts playing.
 - 🛡️ **Anti-Distraction Suite**: Automatically suppresses YouTube Shorts shelves, Premium upgrade popups, and promotional survey banners.
 - ⚡ **Shift + Scroll Speed Controller**: Hold `Shift` and scroll anywhere over the video player to smoothly adjust playback speed (`0.25x` to `4.00x`) with a Glass Toast HUD alert.
@@ -43,6 +43,16 @@
 - 🎤 **Hands-Free Voice Command Engine**: Control playback and skip ads effortlessly using real-time speech recognition ("Skip", "Pause", "Play", "Mute", "Speed up").
 - ⏩ **16x Speed Unskippable Ad Fast-Forwarding**: Instantly speeds through unskippable ads at 16.0x playback rate while auto-muting rapid audio.
 - 💫 **Max-Visibility Raycast Motion Icon**: Prominent 60 FPS micro-pulse animation in Chrome toolbar featuring a continuous conic radar sweep beam.
+
+---
+
+## ⚡ 1080p Premium Enhanced Bitrate Unlocker
+
+YouTube provides a higher bitrate video stream labeled **1080p Premium HD (Enhanced bitrate)**. 
+
+- **How YouTube Hands Free Unlocks Enhanced Bitrate**:
+  1. Intercepts the HTML5 Player API (`setPlaybackQualityRange`, `setPlaybackQuality`) to enforce maximum bitrate stream profiles (`highres`, `hd2160`, `hd1440`, `hd1080`).
+  2. Automatically selects `"1080p Premium"` from YouTube's quality menu option when available, ensuring maximum visual fidelity and zero video compression artifacts.
 
 ---
 
@@ -102,7 +112,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 4. **Reload Unpacked Extension**:
    - Click **Load unpacked** (or click the **Reload ↺** refresh icon on the `YouTube Hands Free` card).
 
-5. **Enjoy Fair, Safe, and Hands-Free 4K YouTube Streaming!** 🎉
+5. **Enjoy Unlocked 1080p Premium & Hands-Free 4K YouTube Streaming!** 🎉
 
 ---
 

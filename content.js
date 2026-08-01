@@ -118,7 +118,7 @@ function predictVideoAds() {
   return markers;
 }
 
-// 4. Upcoming Ad Alert Engine (Refined Timeline Scanning)
+// 4. Upcoming Ad Alert Engine
 function checkUpcomingAds() {
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
 
@@ -196,41 +196,61 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 5. High Bitrate & 4K Lock Engine
-function enforceHighBitrateQuality() {
+// 5. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
+function enforceEnhancedBitrate() {
   if (!settings.isHighBitrateEnabled) return;
-  if (Date.now() - lastQualityCheck < 4000) return;
+  if (Date.now() - lastQualityCheck < 3500) return;
   lastQualityCheck = Date.now();
 
   const player = document.querySelector("#movie_player, .html5-video-player");
-  if (!player) return;
 
-  try {
-    if (typeof player.getAvailableQualityLevels === "function") {
-      const levels = player.getAvailableQualityLevels();
-      if (Array.isArray(levels) && levels.length > 0) {
-        const targetQuality =
-          levels.find((l) =>
-            ["highres", "hd2160", "hd1440", "hd1080"].includes(l),
-          ) || levels[0];
+  // A. Unlock via HTML5 Player API
+  if (player) {
+    try {
+      if (typeof player.getAvailableQualityLevels === "function") {
+        const levels = player.getAvailableQualityLevels();
+        if (Array.isArray(levels) && levels.length > 0) {
+          const targetQuality =
+            levels.find((l) =>
+              ["highres", "hd2160", "hd1440", "hd1080"].includes(l),
+            ) || levels[0];
 
-        if (
-          typeof player.getPlaybackQuality === "function" &&
-          player.getPlaybackQuality() !== targetQuality
-        ) {
-          if (typeof player.setPlaybackQualityRange === "function") {
-            player.setPlaybackQualityRange(targetQuality, targetQuality);
-          }
-          if (typeof player.setPlaybackQuality === "function") {
-            player.setPlaybackQuality(targetQuality);
+          if (
+            typeof player.getPlaybackQuality === "function" &&
+            player.getPlaybackQuality() !== targetQuality
+          ) {
+            if (typeof player.setPlaybackQualityRange === "function") {
+              player.setPlaybackQualityRange(targetQuality, targetQuality);
+            }
+            if (typeof player.setPlaybackQuality === "function") {
+              player.setPlaybackQuality(targetQuality);
+            }
           }
         }
       }
-    }
+    } catch (e) {}
+  }
+
+  // B. Auto-Select "1080p Premium (Enhanced Bitrate)" in YouTube Menu if present
+  try {
+    const menuItems = document.querySelectorAll(
+      ".ytp-panel-menu .ytp-menuitem, .ytp-quality-menu .ytp-menuitem",
+    );
+    menuItems.forEach((item) => {
+      const text = (item.textContent || "").toLowerCase();
+      if (
+        (text.includes("1080p premium") || text.includes("enhanced bitrate")) &&
+        !item.classList.contains("ytp-button-active") &&
+        item.getAttribute("aria-checked") !== "true"
+      ) {
+        item.click();
+        showVoiceToast("Unlocked 1080p Premium Enhanced Bitrate ⚡");
+      }
+    });
   } catch (e) {}
 }
 
-// 6. Auto Theater Mode Engine (ytd-watch-flexy attribute & shortcut fallback)
+// 6. Auto Theater Mode Engine
 function enforceAutoTheater() {
   if (!settings.isAutoTheaterEnabled) return;
   if (Date.now() - lastTheaterCheck < 4000) return;
@@ -243,7 +263,6 @@ function enforceAutoTheater() {
     if (sizeBtn) {
       sizeBtn.click();
     } else {
-      // Fallback: Dispatch YouTube native 't' shortcut
       const event = new KeyboardEvent("keydown", {
         key: "t",
         keyCode: 84,
@@ -278,7 +297,7 @@ function toggleAntiDistractionCSS(enable) {
   }
 }
 
-// 8. Shift + Scroll Speed Controller (Event Capture Phase Intercept)
+// 8. Shift + Scroll Speed Controller
 window.addEventListener(
   "wheel",
   (e) => {
@@ -299,11 +318,11 @@ window.addEventListener(
   { capture: true, passive: false },
 );
 
-// 9. Main Ad Engine Loop
+// 9. Main Loop
 setInterval(() => {
   predictVideoAds();
   checkUpcomingAds();
-  enforceHighBitrateQuality();
+  enforceEnhancedBitrate();
   enforceAutoTheater();
 
   if (!settings.isSkipperEnabled) return;

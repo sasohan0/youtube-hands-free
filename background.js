@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. After Effects Motion Graphics Toolbar Icon Engine
+// 2. Transparent Background After Effects Motion Graphics Toolbar Icon Engine
 function renderAfterEffectsIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
@@ -57,36 +57,27 @@ function renderAfterEffectsIcon() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Transparent Background Clear (No dark square background fill)
     ctx.clearRect(0, 0, 32, 32);
 
     const time = frame * 0.12;
     const cycle = Math.floor(frame / 32) % 3; // Morph between 3 icon motion scenes
 
-    // Dark Glass Container Background
-    ctx.fillStyle = "#090b10";
-    ctx.beginPath();
-    if (typeof ctx.roundRect === "function") {
-      ctx.roundRect(0, 0, 32, 32, 7);
-    } else {
-      ctx.rect(0, 0, 32, 32);
-    }
-    ctx.fill();
-
     // After Effects Motion Graphic: Expanding Radial Shockwave Ring
     const waveRadius = 3 + ((frame * 0.7) % 13);
     const waveOpacity = 1 - waveRadius / 13;
-    ctx.strokeStyle = `rgba(255, 0, 80, ${waveOpacity * 0.65})`;
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = `rgba(255, 0, 80, ${waveOpacity * 0.7})`;
+    ctx.lineWidth = 1.4;
     ctx.beginPath();
     ctx.arc(16, 16, waveRadius, 0, Math.PI * 2);
     ctx.stroke();
 
     // Morphing Scene 1: Vibing Equalizer Spectrum Bars (Hands-Free Audio & Speech)
     if (cycle === 0) {
-      const h1 = 6 + Math.sin(time * 3.5) * 4;
-      const h2 = 11 + Math.cos(time * 4.5) * 5;
-      const h3 = 8 + Math.sin(time * 5.5) * 4;
-      const h4 = 5 + Math.cos(time * 3) * 3;
+      const h1 = 7 + Math.sin(time * 3.5) * 4;
+      const h2 = 12 + Math.cos(time * 4.5) * 5;
+      const h3 = 9 + Math.sin(time * 5.5) * 4;
+      const h4 = 6 + Math.cos(time * 3) * 3;
 
       ctx.fillStyle = "#00F2FE";
       ctx.fillRect(7, 16 - h1 / 2, 3, h1);
@@ -126,7 +117,7 @@ function renderAfterEffectsIcon() {
       ctx.translate(16, 16);
 
       // Play Core Triangle
-      ctx.fillStyle = "#FFFFFF";
+      ctx.fillStyle = "#FF0050";
       ctx.beginPath();
       ctx.moveTo(-4, -6);
       ctx.lineTo(6, 0);
@@ -139,7 +130,7 @@ function renderAfterEffectsIcon() {
       arcGlow.addColorStop(0, "#8A2BE2");
       arcGlow.addColorStop(1, "#00F2FE");
       ctx.strokeStyle = arcGlow;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.2;
 
       ctx.beginPath();
       ctx.arc(0, 0, 11, -Math.PI / 3, Math.PI / 3);

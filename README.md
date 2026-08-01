@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### After Effects Motion Toolbar Icon, Hardware CDP, AI Voice & 4K Lock Engine
+### Transparent After Effects Motion Icon, Hardware CDP, AI Voice & 4K Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,9 +11,9 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and an **After Effects Motion-Graphics Toolbar Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Transparent After Effects Motion-Graphics Toolbar Icon Engine**.
 
-[Features](#-key-features) • [AE Motion Icon Engine](#-after-effects-motion-toolbar-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
+[Features](#-key-features) • [Transparent AE Motion Icon](#-transparent-after-effects-motion-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
 </div>
 
@@ -23,14 +23,14 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with After Effects Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Transparent Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
-- 🎬 **After Effects Motion-Graphics Icon Engine**: Live morphing icon engine in the Chrome extension toolbar. Dynamically transitions between **Vibing Equalizer Audio Bars** 🎵, **Cyber Lightning Spark** ⚡, and **Play Soundwave Arcs** 🎧▶️ with radial shockwave rings.
+- 💫 **Transparent After Effects Motion Icon**: Floating transparent background icon engine in Chrome toolbar. Morphing between **Vibing Equalizer Audio Bars** 🎵, **Cyber Lightning Spark** ⚡, and **Play Soundwave Arcs** 🎧▶️ with expanding shockwaves.
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
 - 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
@@ -42,19 +42,19 @@
 
 ---
 
-## 🎬 After Effects Motion Toolbar Icon
+## 🎬 Transparent After Effects Motion Icon
 
-The extension toolbar icon features a full-fledged **After Effects style Canvas Motion Graphics Engine** rendering live inside `background.js` using `OffscreenCanvas`:
+The extension toolbar icon is rendered frame-by-frame on an `OffscreenCanvas` with a **100% transparent background** (no dark box boundary):
 
 ```text
   [Scene 1: Audio Vibe]          [Scene 2: Energy Spark]         [Scene 3: Soundwaves]
    🎵 Equalizer Bars              ⚡ Lightning Spark              🎧 Dual Soundwave Arcs
-   cyan/pink/purple/green          red/amber gradient glow         white core + cyan arcs
+   cyan/pink/purple/green          red/amber gradient glow         red core + cyan/purple arcs
 ```
 
-1. **Expanding Radial Shockwaves**: Continuous pulsing shockwave rings radiating from the icon core.
-2. **Dynamic Equalizer Spectrum Bars**: 4 neon equalizer bars jumping to simulated audio frequencies, matching the "Hands Free" music & video vibe.
-3. **Morphing Lightning Energy**: Bouncing electric spark representing 16x fast-forward mode.
+1. **Floating HUD Vector Look**: Integrates seamlessly with Chrome light or dark browser themes.
+2. **Expanding Radial Shockwaves**: Continuous pulsing shockwave rings radiating from the icon core.
+3. **Dynamic Equalizer Spectrum Bars**: 4 neon equalizer bars jumping to simulated audio frequencies.
 4. **Interactive Action Badges**: Flashes a neon `#FF0050` `SKIP` badge on ad bypass.
 
 ---
@@ -103,7 +103,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 4. **Reload Unpacked Extension**:
    - Click **Load unpacked** (or click the **Reload ↺** refresh icon on the `YouTube Hands Free` card).
 
-5. **Enjoy Live After Effects Motion 4K Hands-Free YouTube!** 🎉
+5. **Enjoy Live Transparent Motion 4K Hands-Free YouTube!** 🎉
 
 ---
 

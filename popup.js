@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const ffToggle = document.getElementById("fastForwardToggle");
   const voiceToggle = document.getElementById("voiceToggle");
   const upcomingAdToggle = document.getElementById("upcomingAdToggle");
+  const highBitrateToggle = document.getElementById("highBitrateToggle");
   const totalSkippedEl = document.getElementById("totalSkipped");
   const historyListEl = document.getElementById("historyList");
   const clearBtn = document.getElementById("clearBtn");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isFastForwardEnabled: true,
       isVoiceControlEnabled: false,
       isUpcomingAlertEnabled: true,
+      isHighBitrateEnabled: true,
       selectedTheme: "neon",
       predictedAdCount: 0,
       timeSavedSeconds: 0,
@@ -27,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ffToggle.checked = result.isFastForwardEnabled;
       voiceToggle.checked = result.isVoiceControlEnabled;
       upcomingAdToggle.checked = result.isUpcomingAlertEnabled;
+      highBitrateToggle.checked = result.isHighBitrateEnabled;
 
       applyTheme(result.selectedTheme);
       updateStatusText(result.isSkipperEnabled, result.isVoiceControlEnabled);
@@ -54,6 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
   upcomingAdToggle.addEventListener("change", () => {
     chrome.storage.local.set({
       isUpcomingAlertEnabled: upcomingAdToggle.checked,
+    });
+  });
+
+  highBitrateToggle.addEventListener("change", () => {
+    chrome.storage.local.set({
+      isHighBitrateEnabled: highBitrateToggle.checked,
     });
   });
 

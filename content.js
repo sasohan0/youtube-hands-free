@@ -3,9 +3,11 @@ let settings = {
   isFastForwardEnabled: true,
   isVoiceControlEnabled: false,
   isUpcomingAlertEnabled: true,
+  isHighBitrateEnabled: true,
 };
 let lastLogTime = 0;
 let lastAlertTime = 0;
+let lastQualityCheck = 0;
 let recognition = null;
 
 // 1. Sync Settings with UI Storage
@@ -15,6 +17,7 @@ chrome.storage.local.get(
     isFastForwardEnabled: true,
     isVoiceControlEnabled: false,
     isUpcomingAlertEnabled: true,
+    isHighBitrateEnabled: true,
   },
   (res) => {
     settings = res;
@@ -29,6 +32,8 @@ chrome.storage.onChanged.addListener((changes) => {
     settings.isFastForwardEnabled = changes.isFastForwardEnabled.newValue;
   if (changes.isUpcomingAlertEnabled)
     settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
+  if (changes.isHighBitrateEnabled)
+    settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
   if (changes.isVoiceControlEnabled) {
     settings.isVoiceControlEnabled = changes.isVoiceControlEnabled.newValue;
     toggleVoiceEngine(settings.isVoiceControlEnabled);
@@ -59,7 +64,7 @@ function logSkipHistory() {
 
         chrome.storage.local.set({
           skipCount: data.skipCount + 1,
-          timeSavedSeconds: data.timeSavedSeconds + 15, // Approx 15s saved per ad
+          timeSavedSeconds: data.timeSavedSeconds + 15,
           skipHistory: history,
         });
       },
@@ -74,7 +79,6 @@ function predictVideoAds() {
   );
   let predictedCount = markers.length;
 
-  // Fallback estimation if markers are not rendered yet based on video length
   const video = document.querySelector("video");
   if (
     predictedCount === 0 &&
@@ -103,13 +107,11 @@ function checkUpcomingAds() {
   const currentTime = video.currentTime;
 
   markers.forEach((marker) => {
-    // Estimate marker position relative to video duration
     const styleLeft = parseFloat(marker.style.left);
     if (!isNaN(styleLeft)) {
       const markerTime = (styleLeft / 100) * video.duration;
       const diff = markerTime - currentTime;
 
-      // Show alert if video is 1 to 5 seconds away from ad break
       if (diff > 0.5 && diff <= 5.5 && Date.now() - lastAlertTime > 12000) {
         lastAlertTime = Date.now();
         showUpcomingAdTooltip(Math.round(diff));
@@ -167,10 +169,45 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 5. Main Execution Loop for Ad Skipping & Monitoring
+// 5. High Bitrate & 4K Quality Lock Engine
+function enforceHighBitrateQuality() {
+  if (!settings.isHighBitrateEnabled) return;
+  if (Date.now() - lastQualityCheck < 4000) return;
+  lastQualityCheck = Date.now();
+
+  const player = document.querySelector("#movie_player, .html5-video-player");
+  if (!player) return;
+
+  try {
+    if (typeof player.getAvailableQualityLevels === "function") {
+      const levels = player.getAvailableQualityLevels();
+      if (Array.isArray(levels) && levels.length > 0) {
+        const targetQuality =
+          levels.find((l) =>
+            ["highres", "hd2160", "hd1440", "hd1080"].includes(l),
+          ) || levels[0];
+
+        if (
+          typeof player.getPlaybackQuality === "function" &&
+          player.getPlaybackQuality() !== targetQuality
+        ) {
+          if (typeof player.setPlaybackQualityRange === "function") {
+            player.setPlaybackQualityRange(targetQuality, targetQuality);
+          }
+          if (typeof player.setPlaybackQuality === "function") {
+            player.setPlaybackQuality(targetQuality);
+          }
+        }
+      }
+    }
+  } catch (e) {}
+}
+
+// 6. Main Execution Loop for Ad Skipping & Monitoring
 setInterval(() => {
   predictVideoAds();
   checkUpcomingAds();
+  enforceHighBitrateQuality();
 
   if (!settings.isSkipperEnabled) return;
 
@@ -217,7 +254,7 @@ setInterval(() => {
   });
 }, 300);
 
-// 6. Voice Command Recognition Engine
+// 7. Voice Command Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

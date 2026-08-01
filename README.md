@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Next-Gen Hardware CDP, AI Voice & Ad Predictor Engine
+### Hardware CDP, AI Voice, 4K Quality Lock & Ad Predictor Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,9 +11,9 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, and an intelligent **Ad Break Predictor**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and an intelligent **Ad Break Predictor**.
 
-[Features](#-key-features) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Architecture](#%EF%B8%8F-architecture--how-it-works) • [Installation](#-installation-guide) • [Benchmarks](#-performance--benchmarks)
+[Features](#-key-features) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Architecture](#%EF%B8%8F-architecture--how-it-works) • [Installation](#-installation-guide) • [Benchmarks](#-performance--benchmarks)
 
 </div>
 
@@ -23,7 +23,7 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Ad Predictor, Time Saved counter, Glass presets (Neon, Cyberpunk, Obsidian), and Hover Shine animations.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with 4K Quality Lock, Ad Predictor, Time Saved counter, Glass presets (Neon, Cyberpunk, Obsidian), and Hover Shine animations.</em></p>
 </div>
 
 ---
@@ -31,6 +31,7 @@
 ## ✨ Key Features
 
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
+- 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
 - 🔔 **Upcoming Ad Announcement HUD**: Displays an on-screen Glass Tooltip notification 5s before an ad break triggers (`⚡ Upcoming Ad in ~5s`).
 - ⏱️ **Time Saved Counter**: Automatically calculates and displays cumulative seconds/minutes saved from skipped & accelerated ads.
@@ -38,6 +39,17 @@
 - ⏩ **16x Speed Unskippable Ad Fast-Forwarding**: Instantly speeds through unskippable ads at 16.0x playback rate while auto-muting rapid audio.
 - 🎨 **Glassmorphic Multi-Theme Presets**: Switch between **Neon Glass**, **Cyberpunk**, and **Obsidian** dark glass themes with custom backdrop blur and hover shine sweep effects.
 - ⚡ **Zero-Lag Execution Loop**: Non-blocking 300ms polling cycle optimized for <1% CPU footprint.
+
+---
+
+## 🎬 High Bitrate & 4K Quality Lock
+
+YouTube often defaults to auto-resolution downgrades (`480p`/`720p`) when switching tabs or during minor network fluctuations. **YouTube Hands Free** continuously interfaces with YouTube's HTML5 Player API (`setPlaybackQualityRange`) to enforce max resolution & 60fps streams.
+
+| Setting | Behavior | Target Quality |
+| :--- | :--- | :--- |
+| **High Bitrate & 4K Lock (ON)** | Locks player to highest available bitrate | `2160p 4K` > `1440p 2K` > `1080p60` |
+| **High Bitrate & 4K Lock (OFF)** | Standard YouTube auto quality mode | Browser default (`auto`) |
 
 ---
 
@@ -116,7 +128,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
    - Click **Load unpacked**.
    - Select the `youtube-hands-free` directory.
 
-5. **Enjoy Ad-Free Hands-Free YouTube!** 🎉
+5. **Enjoy Ad-Free 4K Hands-Free YouTube!** 🎉
 
 ---
 
@@ -125,6 +137,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 | Metric | YouTube Hands Free | Traditional Extension |
 | :--- | :--- | :--- |
 | **Detection Time** | `< 50ms` | `200ms - 500ms` |
+| **Video Quality Lock** | `Max 4K / 1080p60` | Auto (Downgrades) |
 | **Unskippable Ad Handling** | `16x Fast-Forward` | None (Wait for ad) |
 | **Ad Break Prediction** | Real-time Timeline Scan | None |
 | **Voice Command Latency** | `< 100ms` | N/A |

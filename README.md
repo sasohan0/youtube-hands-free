@@ -23,7 +23,7 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with 1080p Premium Enhanced Bitrate Lock, Creator Fair-Play Mode, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with 1080p Premium Enhanced Bitrate Lock, Creator Fair-Play Mode, 4K Quality Lock, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
@@ -37,7 +37,6 @@
 - 🎭 **Auto-Theater Mode**: Automatically expands YouTube player into full Cinema / Theater Mode when a video starts playing.
 - 🛡️ **Anti-Distraction Suite**: Automatically suppresses YouTube Shorts shelves, Premium upgrade popups, and promotional survey banners.
 - ⚡ **Shift + Scroll Speed Controller**: Hold `Shift` and scroll anywhere over the video player to smoothly adjust playback speed (`0.25x` to `4.00x`) with a Glass Toast HUD alert.
-- 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
 - 🔔 **Upcoming Ad Announcement HUD**: Displays an on-screen Glass Tooltip notification 5s before an ad break triggers (`⚡ Upcoming Ad in ~5s`).
 - ⏱️ **Time Saved Counter**: Automatically calculates and displays cumulative seconds/minutes saved from skipped & accelerated ads.
 - 🎤 **Hands-Free Voice Command Engine**: Control playback and skip ads effortlessly using real-time speech recognition ("Skip", "Pause", "Play", "Mute", "Speed up").

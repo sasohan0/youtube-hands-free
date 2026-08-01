@@ -24,7 +24,7 @@ function isContextValid() {
   }
 }
 
-// 1. Sync Settings with Storage (Safely Wrapped)
+// 1. Sync Settings with Storage
 if (isContextValid()) {
   try {
     chrome.storage.local.get(
@@ -117,37 +117,7 @@ function logSkipHistory() {
   }
 }
 
-// 3. Ad Predictor Engine
-function predictVideoAds() {
-  if (!isContextValid()) return [];
-
-  const markers = document.querySelectorAll(
-    ".ytp-ad-marker-container .ytp-ad-marker, .ytp-progress-bar .ytp-ad-marker, .ytp-ad-marker",
-  );
-  let predictedCount = markers.length;
-
-  const video = document.querySelector("video");
-  if (
-    predictedCount === 0 &&
-    video &&
-    isFinite(video.duration) &&
-    video.duration > 0
-  ) {
-    const mins = video.duration / 60;
-    if (mins > 20) predictedCount = Math.floor(mins / 7);
-    else if (mins > 5) predictedCount = 2;
-    else if (mins > 2) predictedCount = 1;
-  }
-
-  if (isContextValid()) {
-    try {
-      chrome.storage.local.set({ predictedAdCount: predictedCount });
-    } catch (e) {}
-  }
-  return markers;
-}
-
-// 4. Upcoming Ad Alert Engine
+// 3. Upcoming Ad Alert Engine
 function checkUpcomingAds() {
   if (!isContextValid()) return;
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
@@ -226,7 +196,7 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 5. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
+// 4. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
 function enforceEnhancedBitrate() {
   if (!isContextValid()) return;
   if (!settings.isHighBitrateEnabled) return;
@@ -279,7 +249,7 @@ function enforceEnhancedBitrate() {
   } catch (e) {}
 }
 
-// 6. Auto Theater Mode Engine
+// 5. Auto Theater Mode Engine
 function enforceAutoTheater() {
   if (!isContextValid()) return;
   if (!settings.isAutoTheaterEnabled) return;
@@ -305,7 +275,7 @@ function enforceAutoTheater() {
   }
 }
 
-// 7. Anti-Distraction Engine
+// 6. Anti-Distraction Engine
 function toggleAntiDistractionCSS(enable) {
   let styleEl = document.getElementById("yt-handsfree-antidistraction-style");
   if (enable) {
@@ -327,7 +297,7 @@ function toggleAntiDistractionCSS(enable) {
   }
 }
 
-// 8. Shift + Scroll Speed Controller
+// 7. Shift + Scroll Speed Controller
 window.addEventListener(
   "wheel",
   (e) => {
@@ -349,7 +319,7 @@ window.addEventListener(
   { capture: true, passive: false },
 );
 
-// 9. Main Engine Interval Loop (Guarded against extension context invalidation)
+// 8. Main Engine Interval Loop (Guarded against extension context invalidation)
 const mainInterval = setInterval(() => {
   if (!isContextValid()) {
     clearInterval(mainInterval);
@@ -357,7 +327,6 @@ const mainInterval = setInterval(() => {
   }
 
   try {
-    predictVideoAds();
     checkUpcomingAds();
     enforceEnhancedBitrate();
     enforceAutoTheater();
@@ -424,7 +393,7 @@ const mainInterval = setInterval(() => {
   } catch (e) {}
 }, 300);
 
-// 10. Voice Recognition Engine
+// 9. Voice Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

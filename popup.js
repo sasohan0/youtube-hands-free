@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn = document.getElementById("clearBtn");
   const themeBtns = document.querySelectorAll(".theme-btn");
   const statusText = document.getElementById("statusText");
-  const predictedAdCountEl = document.getElementById("predictedAdCount");
   const timeSavedEl = document.getElementById("timeSaved");
 
   // Load States
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
       isAntiDistractionEnabled: true,
       isSpeedScrollEnabled: true,
       selectedTheme: "neon",
-      predictedAdCount: 0,
       timeSavedSeconds: 0,
     },
     (result) => {
@@ -49,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         result.isVoiceControlEnabled,
         result.isFairPlayEnabled,
       );
-      renderMetrics(result.predictedAdCount, result.timeSavedSeconds);
+      renderMetrics(result.timeSavedSeconds);
     },
   );
 
@@ -138,10 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function renderMetrics(count, seconds) {
-    predictedAdCountEl.textContent =
-      count > 0 ? `~${count} Ads` : "No Ads Detected";
-
+  function renderMetrics(seconds) {
     if (seconds < 60) {
       timeSavedEl.textContent = `${seconds}s`;
     } else {
@@ -218,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { skipCount: 0, skipHistory: [], timeSavedSeconds: 0 },
       () => {
         loadHistory();
-        renderMetrics(0, 0);
+        renderMetrics(0);
         clearBtn.textContent = "Cleared!";
         setTimeout(() => (clearBtn.textContent = "Clear"), 1500);
       },

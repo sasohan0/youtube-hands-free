@@ -17,7 +17,11 @@ let recognition = null;
 
 // Helper: Check if Extension Context is valid
 function isContextValid() {
-  return typeof chrome !== "undefined" && chrome.runtime && !!chrome.runtime.id;
+  try {
+    return typeof chrome !== "undefined" && !!chrome.runtime && !!chrome.runtime.id;
+  } catch (e) {
+    return false;
+  }
 }
 
 // 1. Sync Settings with Storage
@@ -111,6 +115,8 @@ function logSkipHistory() {
 
 // 3. Ad Predictor Engine
 function predictVideoAds() {
+  if (!isContextValid()) return [];
+
   const markers = document.querySelectorAll(
     ".ytp-ad-marker-container .ytp-ad-marker, .ytp-progress-bar .ytp-ad-marker, .ytp-ad-marker",
   );
@@ -139,6 +145,7 @@ function predictVideoAds() {
 
 // 4. Upcoming Ad Alert Engine
 function checkUpcomingAds() {
+  if (!isContextValid()) return;
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
 
   const video = document.querySelector("video");
@@ -217,6 +224,7 @@ function showUpcomingAdTooltip(secondsRemaining) {
 
 // 5. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
 function enforceEnhancedBitrate() {
+  if (!isContextValid()) return;
   if (!settings.isHighBitrateEnabled) return;
   if (Date.now() - lastQualityCheck < 3500) return;
   lastQualityCheck = Date.now();
@@ -269,6 +277,7 @@ function enforceEnhancedBitrate() {
 
 // 6. Auto Theater Mode Engine
 function enforceAutoTheater() {
+  if (!isContextValid()) return;
   if (!settings.isAutoTheaterEnabled) return;
   if (Date.now() - lastTheaterCheck < 4000) return;
 
@@ -318,6 +327,7 @@ function toggleAntiDistractionCSS(enable) {
 window.addEventListener(
   "wheel",
   (e) => {
+    if (!isContextValid()) return;
     if (!settings.isSpeedScrollEnabled || !e.shiftKey) return;
 
     const video = document.querySelector("video");
@@ -336,73 +346,78 @@ window.addEventListener(
 );
 
 // 9. Main Engine Interval Loop (Guarded against extension context invalidation)
-setInterval(() => {
-  if (!isContextValid()) return;
-
-  predictVideoAds();
-  checkUpcomingAds();
-  enforceEnhancedBitrate();
-  enforceAutoTheater();
-
-  if (!settings.isSkipperEnabled) return;
-
-  const video = document.querySelector("video");
-  const adPlaying = document.querySelector(".ad-showing, .ad-interrupting");
-  const skipBtn = document.querySelector(
-    ".ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button",
-  );
-
-  // Feature A: Fast Forward Unskippable
-  if (settings.isFastForwardEnabled && adPlaying && !skipBtn) {
-    if (video && isFinite(video.duration) && video.duration > 0) {
-      if (video.currentTime < video.duration - 0.5) {
-        video.playbackRate = 16.0;
-        video.muted = true;
-      }
-    }
+const mainInterval = setInterval(() => {
+  if (!isContextValid()) {
+    clearInterval(mainInterval);
+    return;
   }
 
-  // Feature B: Hardware Skip Button Clicker
-  if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
-    if (!skipBtn.dataset.firstSeen) {
-      skipBtn.dataset.firstSeen = Date.now();
-    }
+  try {
+    predictVideoAds();
+    checkUpcomingAds();
+    enforceEnhancedBitrate();
+    enforceAutoTheater();
 
-    const elapsed = Date.now() - parseInt(skipBtn.dataset.firstSeen);
-    const waitRequired = settings.isFairPlayEnabled ? 5000 : 0;
+    if (!settings.isSkipperEnabled) return;
 
-    if (elapsed >= waitRequired) {
-      skipBtn.dataset.clicked = "true";
+    const video = document.querySelector("video");
+    const adPlaying = document.querySelector(".ad-showing, .ad-interrupting");
+    const skipBtn = document.querySelector(
+      ".ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button",
+    );
 
-      const rect = skipBtn.getBoundingClientRect();
-      const clickX = Math.round(rect.left + rect.width / 2);
-      const clickY = Math.round(rect.top + rect.height / 2);
-
-      if (isContextValid()) {
-        try {
-          chrome.runtime.sendMessage({
-            action: "hardware_click",
-            x: clickX,
-            y: clickY,
-          });
-        } catch (e) {}
-      }
-
-      logSkipHistory();
-
-      setTimeout(() => {
-        if (skipBtn) {
-          skipBtn.dataset.clicked = "";
-          skipBtn.dataset.firstSeen = "";
+    // Feature A: Fast Forward Unskippable
+    if (settings.isFastForwardEnabled && adPlaying && !skipBtn) {
+      if (video && isFinite(video.duration) && video.duration > 0) {
+        if (video.currentTime < video.duration - 0.5) {
+          video.playbackRate = 16.0;
+          video.muted = true;
         }
-      }, 2000);
+      }
     }
-  }
 
-  // Feature C: Close Banners
-  document.querySelectorAll(".ytp-ad-overlay-close-button").forEach((btn) => {
-    if (btn.offsetParent !== null) btn.click();
-  });
+    // Feature B: Hardware Skip Button Clicker
+    if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
+      if (!skipBtn.dataset.firstSeen) {
+        skipBtn.dataset.firstSeen = Date.now();
+      }
+
+      const elapsed = Date.now() - parseInt(skipBtn.dataset.firstSeen);
+      const waitRequired = settings.isFairPlayEnabled ? 5000 : 0;
+
+      if (elapsed >= waitRequired) {
+        skipBtn.dataset.clicked = "true";
+
+        const rect = skipBtn.getBoundingClientRect();
+        const clickX = Math.round(rect.left + rect.width / 2);
+        const clickY = Math.round(rect.top + rect.height / 2);
+
+        if (isContextValid()) {
+          try {
+            chrome.runtime.sendMessage({
+              action: "hardware_click",
+              x: clickX,
+              y: clickY,
+            });
+          } catch (e) {}
+        }
+
+        logSkipHistory();
+
+        setTimeout(() => {
+          if (skipBtn) {
+            skipBtn.dataset.clicked = "";
+            skipBtn.dataset.firstSeen = "";
+          }
+        }, 2000);
+      }
+    }
+
+    // Feature C: Close Banners
+    document.querySelectorAll(".ytp-ad-overlay-close-button").forEach((btn) => {
+      if (btn.offsetParent !== null) btn.click();
+    });
+  } catch (e) {}
 }, 300);
 
 // 10. Voice Recognition Engine

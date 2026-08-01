@@ -78,46 +78,7 @@ if (isContextValid()) {
   } catch (e) {}
 }
 
-// 2. History Logger
-function logSkipHistory() {
-  if (!isContextValid()) return;
-  if (Date.now() - lastLogTime > 3000) {
-    lastLogTime = Date.now();
-    const cleanTitle = (document.title || "Unknown")
-      .replace(/^\(\d+\)\s*/, "")
-      .replace(" - YouTube", "");
-    try {
-      chrome.storage.local.get(
-        { skipCount: 0, skipHistory: [], timeSavedSeconds: 0 },
-        (data) => {
-          if (chrome.runtime.lastError) return;
-          if (!isContextValid()) return;
-          const history = [
-            {
-              title: cleanTitle,
-              time: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              }),
-            },
-            ...data.skipHistory,
-          ].slice(0, 5);
-
-          try {
-            chrome.storage.local.set({
-              skipCount: data.skipCount + 1,
-              timeSavedSeconds: data.timeSavedSeconds + 15,
-              skipHistory: history,
-            });
-          } catch (e) {}
-        },
-      );
-    } catch (e) {}
-  }
-}
-
-// 3. Upcoming Ad Alert Engine
+// 2. Upcoming Ad Alert Engine
 function checkUpcomingAds() {
   if (!isContextValid()) return;
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
@@ -196,7 +157,7 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 4. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
+// 3. Dual High Bitrate & 1080p Premium Enhanced Bitrate Engine
 function enforceEnhancedBitrate() {
   if (!isContextValid()) return;
   if (!settings.isHighBitrateEnabled) return;
@@ -249,7 +210,7 @@ function enforceEnhancedBitrate() {
   } catch (e) {}
 }
 
-// 5. Auto Theater Mode Engine
+// 4. Auto Theater Mode Engine
 function enforceAutoTheater() {
   if (!isContextValid()) return;
   if (!settings.isAutoTheaterEnabled) return;
@@ -275,7 +236,7 @@ function enforceAutoTheater() {
   }
 }
 
-// 6. Anti-Distraction Engine
+// 5. Anti-Distraction Engine
 function toggleAntiDistractionCSS(enable) {
   let styleEl = document.getElementById("yt-handsfree-antidistraction-style");
   if (enable) {
@@ -297,7 +258,7 @@ function toggleAntiDistractionCSS(enable) {
   }
 }
 
-// 7. Shift + Scroll Speed Controller
+// 6. Shift + Scroll Speed Controller
 window.addEventListener(
   "wheel",
   (e) => {
@@ -319,7 +280,7 @@ window.addEventListener(
   { capture: true, passive: false },
 );
 
-// 8. Main Engine Interval Loop (Guarded against extension context invalidation)
+// 7. Main Engine Interval Loop (Proven Rock-Solid Fast-Forward & Skipper)
 const mainInterval = setInterval(() => {
   if (!isContextValid()) {
     clearInterval(mainInterval);
@@ -334,12 +295,16 @@ const mainInterval = setInterval(() => {
     if (!settings.isSkipperEnabled) return;
 
     const video = document.querySelector("video");
-    const adPlaying = document.querySelector(".ad-showing, .ad-interrupting");
+    const player = document.querySelector("#movie_player, .html5-video-player");
+    const adPlaying =
+      (player && (player.classList.contains("ad-showing") || player.classList.contains("ad-interrupting"))) ||
+      document.querySelector(".ad-showing, .ad-interrupting");
+
     const skipBtn = document.querySelector(
-      ".ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button",
+      ".ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button, .ytp-ad-skip-button-slot, .ytp-skip-ad-button-single, button[class*='skip-ad']",
     );
 
-    // Feature A: Fast Forward Unskippable
+    // Feature A: Fast Forward Unskippable Ads (16.0x Speed + Mute)
     if (settings.isFastForwardEnabled && adPlaying && !skipBtn) {
       if (video && isFinite(video.duration) && video.duration > 0) {
         if (video.currentTime < video.duration - 0.5) {
@@ -349,7 +314,7 @@ const mainInterval = setInterval(() => {
       }
     }
 
-    // Feature B: Hardware Skip Button Clicker
+    // Feature B: Hardware & DOM Skip Button Clicker
     if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
       if (!skipBtn.dataset.firstSeen) {
         skipBtn.dataset.firstSeen = Date.now();
@@ -361,6 +326,12 @@ const mainInterval = setInterval(() => {
       if (elapsed >= waitRequired) {
         skipBtn.dataset.clicked = "true";
 
+        // Immediate Native DOM Click Fallback
+        try {
+          skipBtn.click();
+        } catch (e) {}
+
+        // Hardware CDP Click Simulation
         const rect = skipBtn.getBoundingClientRect();
         const clickX = Math.round(rect.left + rect.width / 2);
         const clickY = Math.round(rect.top + rect.height / 2);
@@ -374,8 +345,6 @@ const mainInterval = setInterval(() => {
             });
           } catch (e) {}
         }
-
-        logSkipHistory();
 
         setTimeout(() => {
           if (skipBtn) {
@@ -393,7 +362,7 @@ const mainInterval = setInterval(() => {
   } catch (e) {}
 }, 300);
 
-// 9. Voice Recognition Engine
+// 8. Voice Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

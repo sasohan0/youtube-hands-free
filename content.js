@@ -39,6 +39,7 @@ function applyAllSettings() {
   toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
   toggleAudioBooster(settings.isAudioBoostEnabled);
   setupSleepTimer(settings.sleepTimerMinutes);
+  injectScreenshotButton();
 }
 
 if (isContextValid()) {
@@ -105,7 +106,69 @@ function toggleAudioBooster(enable) {
   } catch (e) {}
 }
 
-// 3. Hotkey Listener (Clean 4K Screenshot: Alt+S | Picture-in-Picture: Alt+P)
+// 3. Clean 4K Frame Screenshot Engine (Hotkey: Alt+S & Player Bar Button 📸)
+function captureCleanScreenshot() {
+  const video = document.querySelector("video");
+  if (!video || video.readyState < 2) {
+    showVoiceToast("Video not ready for screenshot 🔍");
+    return;
+  }
+
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth || 1920;
+    canvas.height = video.videoHeight || 1080;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const cleanTitle = (document.title || "video")
+      .replace(/^\(\d+\)\s*/, "")
+      .replace(" - YouTube", "")
+      .replace(/[^a-z0-9]/gi, "_");
+    const timeStr = Math.floor(video.currentTime) + "s";
+
+    const link = document.createElement("a");
+    link.download = `YouTube_${cleanTitle}_${timeStr}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+    showVoiceToast("Captured Clean 4K Frame Screenshot 📸");
+  } catch (err) {
+    showVoiceToast("Screenshot capture error ⚠️");
+  }
+}
+
+function injectScreenshotButton() {
+  if (!settings.isScreenshotEnabled) {
+    const existing = document.getElementById("yt-handsfree-ss-btn");
+    if (existing) existing.remove();
+    return;
+  }
+
+  const rightControls = document.querySelector(".ytp-right-controls");
+  if (!rightControls || document.getElementById("yt-handsfree-ss-btn")) return;
+
+  const btn = document.createElement("button");
+  btn.id = "yt-handsfree-ss-btn";
+  btn.className = "ytp-button";
+  btn.title = "Capture Clean 4K Frame Screenshot (Alt+S)";
+  btn.style.cssText =
+    "display: inline-flex; align-items: center; justify-content: center; font-size: 16px; width: 36px; height: 100%; cursor: pointer; transition: transform 0.2s ease;";
+  btn.innerHTML = "📸";
+
+  btn.addEventListener("mouseenter", () => (btn.style.transform = "scale(1.2)"));
+  btn.addEventListener("mouseleave", () => (btn.style.transform = "scale(1.0)"));
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    captureCleanScreenshot();
+  });
+
+  rightControls.insertBefore(btn, rightControls.firstChild);
+}
+
+// Hotkey Listener (Clean 4K Screenshot: Alt+S | Picture-in-Picture: Alt+P)
 window.addEventListener(
   "keydown",
   (e) => {
@@ -114,31 +177,8 @@ window.addEventListener(
     // A. Clean 4K Video Frame Screenshot (Alt + S)
     if (e.altKey && (e.key === "s" || e.key === "S")) {
       if (!settings.isScreenshotEnabled) return;
-      const video = document.querySelector("video");
-      if (!video || video.readyState < 2) return;
-
       e.preventDefault();
-
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth || 1920;
-        canvas.height = video.videoHeight || 1080;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        const cleanTitle = (document.title || "video")
-          .replace(/^\(\d+\)\s*/, "")
-          .replace(" - YouTube", "")
-          .replace(/[^a-z0-9]/gi, "_");
-        const timeStr = Math.floor(video.currentTime) + "s";
-
-        const link = document.createElement("a");
-        link.download = `YouTube_${cleanTitle}_${timeStr}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-
-        showVoiceToast("Captured Clean 4K Frame Screenshot 📸");
-      } catch (err) {}
+      captureCleanScreenshot();
     }
 
     // B. Floating Picture-in-Picture Mode (Alt + P)
@@ -391,6 +431,7 @@ const mainInterval = setInterval(() => {
     checkUpcomingAds();
     enforceEnhancedBitrate();
     enforceAutoTheater();
+    injectScreenshotButton();
 
     if (!settings.isSkipperEnabled) return;
 

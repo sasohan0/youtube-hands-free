@@ -15,7 +15,7 @@ let lastQualityCheck = 0;
 let lastTheaterCheck = 0;
 let recognition = null;
 
-// 1. Sync Settings with UI Storage
+// 1. Sync Settings with Storage
 chrome.storage.local.get(
   {
     isSkipperEnabled: true,
@@ -46,8 +46,10 @@ chrome.storage.onChanged.addListener((changes) => {
     settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
   if (changes.isHighBitrateEnabled)
     settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
-  if (changes.isAutoTheaterEnabled)
+  if (changes.isAutoTheaterEnabled) {
     settings.isAutoTheaterEnabled = changes.isAutoTheaterEnabled.newValue;
+    if (settings.isAutoTheaterEnabled) lastTheaterCheck = 0;
+  }
   if (changes.isSpeedScrollEnabled)
     settings.isSpeedScrollEnabled = changes.isSpeedScrollEnabled.newValue;
   if (changes.isAntiDistractionEnabled) {
@@ -60,7 +62,7 @@ chrome.storage.onChanged.addListener((changes) => {
   }
 });
 
-// 2. History & Metrics Logger
+// 2. History Logger
 function logSkipHistory() {
   if (Date.now() - lastLogTime > 3000) {
     lastLogTime = Date.now();
@@ -92,10 +94,10 @@ function logSkipHistory() {
   }
 }
 
-// 3. Ad Prediction Engine
+// 3. Ad Predictor Engine
 function predictVideoAds() {
   const markers = document.querySelectorAll(
-    ".ytp-ad-marker-container .ytp-ad-marker, .ytp-progress-bar .ytp-ad-marker",
+    ".ytp-ad-marker-container .ytp-ad-marker, .ytp-progress-bar .ytp-ad-marker, .ytp-ad-marker",
   );
   let predictedCount = markers.length;
 
@@ -116,23 +118,29 @@ function predictVideoAds() {
   return markers;
 }
 
-// 4. Upcoming Ad Tooltip Announcement Engine
+// 4. Upcoming Ad Alert Engine (Refined Timeline Scanning)
 function checkUpcomingAds() {
   if (!settings.isUpcomingAlertEnabled || !settings.isSkipperEnabled) return;
 
   const video = document.querySelector("video");
   if (!video || !isFinite(video.duration) || video.paused) return;
 
-  const markers = document.querySelectorAll(".ytp-ad-marker");
+  const adShowing = document.querySelector(".ad-showing, .ad-interrupting");
+  if (adShowing) return;
+
+  const markers = document.querySelectorAll(
+    ".ytp-ad-marker, .ytp-ad-marker-container .ytp-ad-marker",
+  );
   const currentTime = video.currentTime;
+  const duration = video.duration;
 
   markers.forEach((marker) => {
-    const styleLeft = parseFloat(marker.style.left);
-    if (!isNaN(styleLeft)) {
-      const markerTime = (styleLeft / 100) * video.duration;
+    let styleLeft = parseFloat(marker.style.left);
+    if (!isNaN(styleLeft) && duration > 0) {
+      const markerTime = (styleLeft / 100) * duration;
       const diff = markerTime - currentTime;
 
-      if (diff > 0.5 && diff <= 5.5 && Date.now() - lastAlertTime > 12000) {
+      if (diff > 0.5 && diff <= 8.0 && Date.now() - lastAlertTime > 10000) {
         lastAlertTime = Date.now();
         showUpcomingAdTooltip(Math.round(diff));
       }
@@ -150,11 +158,11 @@ function showUpcomingAdTooltip(secondsRemaining) {
       top: 80px;
       left: 50%;
       transform: translateX(-50%) translateY(-15px);
-      z-index: 99999;
-      background: rgba(15, 17, 21, 0.88);
+      z-index: 999999;
+      background: rgba(15, 17, 21, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(245, 158, 11, 0.5);
+      border: 1px solid rgba(245, 158, 11, 0.6);
       color: #ffffff;
       padding: 10px 20px;
       border-radius: 30px;
@@ -188,7 +196,7 @@ function showUpcomingAdTooltip(secondsRemaining) {
   }, 4000);
 }
 
-// 5. High Bitrate & 4K Quality Lock Engine
+// 5. High Bitrate & 4K Lock Engine
 function enforceHighBitrateQuality() {
   if (!settings.isHighBitrateEnabled) return;
   if (Date.now() - lastQualityCheck < 4000) return;
@@ -222,19 +230,33 @@ function enforceHighBitrateQuality() {
   } catch (e) {}
 }
 
-// 6. Auto Theater Mode Engine
+// 6. Auto Theater Mode Engine (ytd-watch-flexy attribute & shortcut fallback)
 function enforceAutoTheater() {
   if (!settings.isAutoTheaterEnabled) return;
-  if (Date.now() - lastTheaterCheck < 5000) return;
-  lastTheaterCheck = Date.now();
+  if (Date.now() - lastTheaterCheck < 4000) return;
 
-  const sizeBtn = document.querySelector(".ytp-size-button");
-  if (sizeBtn && sizeBtn.title && sizeBtn.title.toLowerCase().includes("theater")) {
-    sizeBtn.click();
+  const watchFlexy = document.querySelector("ytd-watch-flexy");
+  if (watchFlexy && !watchFlexy.hasAttribute("theater")) {
+    lastTheaterCheck = Date.now();
+
+    const sizeBtn = document.querySelector(".ytp-size-button");
+    if (sizeBtn) {
+      sizeBtn.click();
+    } else {
+      // Fallback: Dispatch YouTube native 't' shortcut
+      const event = new KeyboardEvent("keydown", {
+        key: "t",
+        keyCode: 84,
+        which: 84,
+        bubbles: true,
+        cancelable: true,
+      });
+      document.dispatchEvent(event);
+    }
   }
 }
 
-// 7. Anti-Distraction Engine (Hides Shorts shelves & Premium promos)
+// 7. Anti-Distraction Engine
 function toggleAntiDistractionCSS(enable) {
   let styleEl = document.getElementById("yt-handsfree-antidistraction-style");
   if (enable) {
@@ -256,23 +278,28 @@ function toggleAntiDistractionCSS(enable) {
   }
 }
 
-// 8. Shift + Scroll Speed Controller Engine
-document.addEventListener("wheel", (e) => {
-  if (!settings.isSpeedScrollEnabled || !e.shiftKey) return;
+// 8. Shift + Scroll Speed Controller (Event Capture Phase Intercept)
+window.addEventListener(
+  "wheel",
+  (e) => {
+    if (!settings.isSpeedScrollEnabled || !e.shiftKey) return;
 
-  const video = document.querySelector("video");
-  if (!video) return;
+    const video = document.querySelector("video");
+    if (!video) return;
 
-  e.preventDefault();
+    e.preventDefault();
+    e.stopPropagation();
 
-  let delta = e.deltaY < 0 ? 0.25 : -0.25;
-  let newRate = Math.min(Math.max(video.playbackRate + delta, 0.25), 4.0);
-  video.playbackRate = parseFloat(newRate.toFixed(2));
+    let delta = e.deltaY < 0 ? 0.25 : -0.25;
+    let newRate = Math.min(Math.max(video.playbackRate + delta, 0.25), 4.0);
+    video.playbackRate = parseFloat(newRate.toFixed(2));
 
-  showVoiceToast(`Speed: ${video.playbackRate}x ⚡`);
-}, { passive: false });
+    showVoiceToast(`Speed: ${video.playbackRate}x ⚡`);
+  },
+  { capture: true, passive: false },
+);
 
-// 9. Main Execution Loop for Ad Skipping & Monitoring (Includes Fair-Play Safeguard)
+// 9. Main Ad Engine Loop
 setInterval(() => {
   predictVideoAds();
   checkUpcomingAds();
@@ -287,7 +314,7 @@ setInterval(() => {
     ".ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button",
   );
 
-  // --- FEATURE A: Unskippable Fast-Forward ---
+  // Feature A: Fast Forward Unskippable
   if (settings.isFastForwardEnabled && adPlaying && !skipBtn) {
     if (video && isFinite(video.duration) && video.duration > 0) {
       if (video.currentTime < video.duration - 0.5) {
@@ -297,7 +324,7 @@ setInterval(() => {
     }
   }
 
-  // --- FEATURE B: Hardware Skip Button Clicker + Fair Play Safeguard ---
+  // Feature B: Hardware Skip Button Clicker
   if (skipBtn && skipBtn.offsetParent !== null && !skipBtn.dataset.clicked) {
     if (!skipBtn.dataset.firstSeen) {
       skipBtn.dataset.firstSeen = Date.now();
@@ -330,13 +357,13 @@ setInterval(() => {
     }
   }
 
-  // --- FEATURE C: Standard Banner & Overlay Closer ---
+  // Feature C: Close Banners
   document.querySelectorAll(".ytp-ad-overlay-close-button").forEach((btn) => {
     if (btn.offsetParent !== null) btn.click();
   });
 }, 300);
 
-// 10. Voice Command Recognition Engine
+// 10. Voice Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -391,7 +418,7 @@ function toggleVoiceEngine(enable) {
   }
 }
 
-// Handle Recognized Voice Commands
+// Handle Voice Commands
 function handleVoiceCommand(command) {
   const video = document.querySelector("video");
   const skipBtn = document.querySelector(
@@ -442,7 +469,7 @@ function handleVoiceCommand(command) {
   }
 }
 
-// Glassmorphic Voice & Speed Toast Notification on YouTube Player
+// Toast HUD Notification
 function showVoiceToast(text) {
   let toast = document.getElementById("yt-handsfree-toast");
   if (!toast) {
@@ -452,8 +479,8 @@ function showVoiceToast(text) {
       position: fixed;
       top: 70px;
       right: 30px;
-      z-index: 99999;
-      background: rgba(15, 17, 21, 0.85);
+      z-index: 999999;
+      background: rgba(15, 17, 21, 0.88);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 0, 80, 0.4);

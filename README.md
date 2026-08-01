@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Raycast/Linear Designer Motion Icon, Hardware CDP, AI Voice & 4K Engine
+### Raycast Designer Motion Icon, Hardware CDP, AI Voice & 4K Lock Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,7 +11,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Raycast/Linear Designer Motion Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Max-Visibility Raycast Designer Motion Icon Engine**.
 
 [Features](#-key-features) • [Raycast Motion Icon](#-raycastlinear-designer-motion-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
@@ -23,14 +23,14 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Raycast Designer Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Max-Visibility Raycast Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
-- 💫 **Raycast/Linear Designer Motion Icon Engine**: Ultra-sophisticated 60 FPS micro-pulse animation in the Chrome toolbar. Features a continuous **Radar Sweep Beam** (`#00F2FE` -> `#FF0050` conic gradient sweep), breathing spring physics, and an elastic **Snap Burst Wave** on ad bypass.
+- 💫 **Max-Visibility Raycast Motion Icon**: Prominent 60 FPS micro-pulse animation in the Chrome toolbar. Features a full-grid **Radar Sweep Beam** (`#00F2FE` -> `#FF0050` conic gradient sweep), enlarged 28x28px dark card base, breathing spring physics, and an elastic **Snap Burst Wave** on ad bypass.
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
 - 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
 - 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
@@ -52,7 +52,7 @@ Designed following top-tier product design principles (Raycast, Linear, Apple ma
    Cyan/Red gradient sweep beam           Expanding Shockwave Burst Ring
 ```
 
-1. **Conic Gradient Radar Sweep**: A subtle, 60 FPS conic gradient ring (`#00F2FE` -> `#FF0050` -> `#8A2BE2`) continuously sweeps around the icon perimeter.
+1. **Full Grid Conic Radar Sweep**: A subtle, 60 FPS conic gradient ring (`#00F2FE` -> `#FF0050` -> `#8A2BE2`) continuously sweeps around the icon perimeter.
 2. **Spring Breathing Physics**: Smooth `Math.sin()` cubic-bezier breathing motion indicating live system monitoring.
 3. **Elastic Execution Snap**: Flashes a neon `SKIP` badge and triggers a 180° elastic snap spin + shockwave burst when an ad is bypassed.
 

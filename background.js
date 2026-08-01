@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Linear / Raycast World-Class Product Designer Icon Engine (32x32 OffscreenCanvas)
+// 2. Large Scale Raycast / Linear Designer Icon Engine (Fills full 32x32 Toolbar Space)
 function renderRaycastDesignerIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
@@ -67,8 +67,8 @@ function renderRaycastDesignerIcon() {
     const center = 16;
     angle = (angle + 4) % 360;
 
-    // Smooth Breathing Pulse Ease (1.0 to 1.15)
-    const breath = 1 + Math.sin((angle * Math.PI) / 90) * 0.06;
+    // Smooth Breathing Pulse Ease
+    const breath = 1 + Math.sin((angle * Math.PI) / 90) * 0.04;
 
     // Handle Skip Action Snap Burst
     let spinAngle = 0;
@@ -79,13 +79,12 @@ function renderRaycastDesignerIcon() {
         isSkipping = false;
         skipAnimProgress = 0;
       } else {
-        // Spring Elastic Snap Physics
         spinAngle = Math.sin(skipAnimProgress * Math.PI) * Math.PI;
-        burstScale = 1 + Math.sin(skipAnimProgress * Math.PI) * 0.25;
+        burstScale = 1 + Math.sin(skipAnimProgress * Math.PI) * 0.2;
       }
     }
 
-    // 1. Raycast-Style Outer Glow Ring (Subtle gradient radar sweep)
+    // 1. Raycast Conic Radar Sweep Ring (Maximizing Outer Margin)
     ctx.save();
     ctx.translate(center, center);
     ctx.rotate((angle * Math.PI) / 180 + spinAngle);
@@ -99,12 +98,12 @@ function renderRaycastDesignerIcon() {
     ctx.strokeStyle = ringGrad;
     ctx.lineWidth = 1.8;
     ctx.beginPath();
-    ctx.arc(0, 0, 13.5, 0, Math.PI * 2);
+    ctx.arc(0, 0, 15, 0, Math.PI * 2);
     ctx.stroke();
 
     // Ad Skip Action Execution Burst Wave
     if (isSkipping) {
-      const ringRadius = 13.5 + skipAnimProgress * 8;
+      const ringRadius = 15 + skipAnimProgress * 6;
       const ringAlpha = 1 - skipAnimProgress;
       ctx.strokeStyle = `rgba(255, 0, 80, ${ringAlpha})`;
       ctx.lineWidth = 1.5;
@@ -115,47 +114,47 @@ function renderRaycastDesignerIcon() {
 
     ctx.restore();
 
-    // 2. Dark Slate Rounded Icon Base Card
+    // 2. Large Dark Obsidian Rounded Card (28x28px - Max Visibility!)
     ctx.save();
     ctx.translate(center, center);
     ctx.scale(breath * burstScale, breath * burstScale);
 
-    ctx.fillStyle = "#0B0E14";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.fillStyle = "#0D1117";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     if (typeof ctx.roundRect === "function") {
-      ctx.roundRect(-10.5, -10.5, 21, 21, 5.5);
+      ctx.roundRect(-14, -14, 28, 28, 6);
     } else {
-      ctx.rect(-10.5, -10.5, 21, 21);
+      ctx.rect(-14, -14, 28, 28);
     }
     ctx.fill();
     ctx.stroke();
 
-    // 3. Razor-Sharp Geometric Fast-Forward Mark (⏩)
+    // 3. Large Crisp Fast-Forward Arrows (⏩)
     // Left Triangle
     ctx.fillStyle = "#FFFFFF";
     ctx.beginPath();
-    ctx.moveTo(-6.5, -4.5);
-    ctx.lineTo(-0.5, 0);
-    ctx.lineTo(-6.5, 4.5);
+    ctx.moveTo(-9, -6.5);
+    ctx.lineTo(-1, 0);
+    ctx.lineTo(-9, 6.5);
     ctx.closePath();
     ctx.fill();
 
     // Right Triangle
     ctx.beginPath();
-    ctx.moveTo(-0.5, -4.5);
-    ctx.lineTo(5.5, 0);
-    ctx.lineTo(-0.5, 4.5);
+    ctx.moveTo(-1, -6.5);
+    ctx.lineTo(7, 0);
+    ctx.lineTo(-1, 6.5);
     ctx.closePath();
     ctx.fill();
 
     // YouTube Red Precision Accent Bar
     ctx.fillStyle = "#FF0050";
     if (typeof ctx.roundRect === "function") {
-      ctx.roundRect(5.5, -4.5, 2, 9, 0.8);
+      ctx.roundRect(7, -6.5, 2.5, 13, 1);
     } else {
-      ctx.fillRect(5.5, -4.5, 2, 9);
+      ctx.fillRect(7, -6.5, 2.5, 13);
     }
     ctx.fill();
 

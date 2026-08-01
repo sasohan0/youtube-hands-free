@@ -1,4 +1,4 @@
-let angle = 0;
+let frame = 0;
 
 // 1. Hardware Clicker Service via CDP
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Live Animated Extension Bar Icon Engine
-function renderLiveIconFrame() {
+// 2. After Effects Motion Graphics Toolbar Icon Engine
+function renderAfterEffectsIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -59,56 +59,108 @@ function renderLiveIconFrame() {
 
     ctx.clearRect(0, 0, 32, 32);
 
-    // Dark sleek background
-    ctx.fillStyle = "#0b0d13";
+    const time = frame * 0.12;
+    const cycle = Math.floor(frame / 32) % 3; // Morph between 3 icon motion scenes
+
+    // Dark Glass Container Background
+    ctx.fillStyle = "#090b10";
     ctx.beginPath();
     if (typeof ctx.roundRect === "function") {
-      ctx.roundRect(1, 1, 30, 30, 7);
+      ctx.roundRect(0, 0, 32, 32, 7);
     } else {
-      ctx.rect(1, 1, 30, 30);
+      ctx.rect(0, 0, 32, 32);
     }
     ctx.fill();
 
-    // Animated Rotating Gradient Arc Ring
-    ctx.save();
-    ctx.translate(16, 16);
-    ctx.rotate((angle * Math.PI) / 180);
-
-    const grad = ctx.createLinearGradient(-16, -16, 16, 16);
-    grad.addColorStop(0, "#FF0050");
-    grad.addColorStop(0.5, "#8A2BE2");
-    grad.addColorStop(1, "#00F2FE");
-
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = 2.5;
+    // After Effects Motion Graphic: Expanding Radial Shockwave Ring
+    const waveRadius = 3 + ((frame * 0.7) % 13);
+    const waveOpacity = 1 - waveRadius / 13;
+    ctx.strokeStyle = `rgba(255, 0, 80, ${waveOpacity * 0.65})`;
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.arc(0, 0, 11, 0, Math.PI * 1.55);
+    ctx.arc(16, 16, waveRadius, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.restore();
 
-    // Pulsing Central Play Triangle Icon
-    const scale = 1 + Math.sin((angle * Math.PI) / 90) * 0.12;
-    ctx.save();
-    ctx.translate(16, 16);
-    ctx.scale(scale, scale);
+    // Morphing Scene 1: Vibing Equalizer Spectrum Bars (Hands-Free Audio & Speech)
+    if (cycle === 0) {
+      const h1 = 6 + Math.sin(time * 3.5) * 4;
+      const h2 = 11 + Math.cos(time * 4.5) * 5;
+      const h3 = 8 + Math.sin(time * 5.5) * 4;
+      const h4 = 5 + Math.cos(time * 3) * 3;
 
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.moveTo(-3, -6);
-    ctx.lineTo(6, 0);
-    ctx.lineTo(-3, 6);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+      ctx.fillStyle = "#00F2FE";
+      ctx.fillRect(7, 16 - h1 / 2, 3, h1);
+      ctx.fillStyle = "#FF0050";
+      ctx.fillRect(12, 16 - h2 / 2, 3, h2);
+      ctx.fillStyle = "#8A2BE2";
+      ctx.fillRect(17, 16 - h3 / 2, 3, h3);
+      ctx.fillStyle = "#10B981";
+      ctx.fillRect(22, 16 - h4 / 2, 3, h4);
+    }
+    // Morphing Scene 2: Cyber Lightning Spark ⚡ (Fast-Forward Energy)
+    else if (cycle === 1) {
+      ctx.save();
+      ctx.translate(16, 16);
+      const boltScale = 1 + Math.sin(time * 5) * 0.15;
+      ctx.scale(boltScale, boltScale);
 
+      const grad = ctx.createLinearGradient(-8, -8, 8, 8);
+      grad.addColorStop(0, "#FF0050");
+      grad.addColorStop(1, "#F59E0B");
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      ctx.moveTo(1, -9);
+      ctx.lineTo(-7, 2);
+      ctx.lineTo(-1, 2);
+      ctx.lineTo(-3, 9);
+      ctx.lineTo(7, -2);
+      ctx.lineTo(1, -2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    // Morphing Scene 3: Pulsing Play Button & Soundwave Arcs 🎧▶️
+    else {
+      ctx.save();
+      ctx.translate(16, 16);
+
+      // Play Core Triangle
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.moveTo(-4, -6);
+      ctx.lineTo(6, 0);
+      ctx.lineTo(-4, 6);
+      ctx.closePath();
+      ctx.fill();
+
+      // Pulsing Dual Soundwave Arcs
+      const arcGlow = ctx.createLinearGradient(-12, -12, 12, 12);
+      arcGlow.addColorStop(0, "#8A2BE2");
+      arcGlow.addColorStop(1, "#00F2FE");
+      ctx.strokeStyle = arcGlow;
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 11, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 11, (2 * Math.PI) / 3, (4 * Math.PI) / 3);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // Output Frame to Extension Bar Icon
     const imageData = ctx.getImageData(0, 0, 32, 32);
     chrome.action.setIcon({ imageData: imageData }, () => {
       if (chrome.runtime.lastError) {}
     });
 
-    angle = (angle + 12) % 360;
+    frame++;
   } catch (e) {}
 }
 
-// Animate frame every 120ms
-setInterval(renderLiveIconFrame, 120);
+// 80ms Refresh Rate (~12.5 FPS smooth morphing)
+setInterval(renderAfterEffectsIcon, 80);

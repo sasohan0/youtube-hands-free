@@ -11,14 +11,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     isSkipping = true;
     skipAnimProgress = 0;
 
-    chrome.action.setBadgeText({ text: "SKIP" });
-    chrome.action.setBadgeBackgroundColor({ color: "#FF0050" });
-    setTimeout(() => {
-      chrome.action.setBadgeText({ text: "" });
-    }, 1500);
+    try {
+      chrome.action.setBadgeText({ text: "SKIP" });
+      chrome.action.setBadgeBackgroundColor({ color: "#FF0050" });
+      setTimeout(() => {
+        try {
+          chrome.action.setBadgeText({ text: "" });
+        } catch (e) {}
+      }, 1500);
+    } catch (e) {}
 
     chrome.debugger.attach({ tabId: tabId }, "1.3", () => {
-      if (chrome.runtime.lastError) return;
+      if (chrome.runtime.lastError) return; // Reading lastError handles the error cleanly
 
       // MOUSE DOWN
       chrome.debugger.sendCommand(
@@ -32,6 +36,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           clickCount: 1,
         },
         () => {
+          if (chrome.runtime.lastError) return;
           // MOUSE UP
           chrome.debugger.sendCommand(
             { tabId: tabId },
@@ -44,7 +49,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
               clickCount: 1,
             },
             () => {
-              chrome.debugger.detach({ tabId: tabId });
+              if (chrome.runtime.lastError) return;
+              try {
+                chrome.debugger.detach({ tabId: tabId }, () => {
+                  if (chrome.runtime.lastError) {}
+                });
+              } catch (e) {}
             },
           );
         },
@@ -163,7 +173,8 @@ function renderRaycastDesignerIcon() {
     // Output 60 FPS Smooth Frame
     const imageData = ctx.getImageData(0, 0, 32, 32);
     chrome.action.setIcon({ imageData: imageData }, () => {
-      if (chrome.runtime.lastError) {}
+      // Reading lastError clears Chrome's uncaught error queue
+      const err = chrome.runtime.lastError;
     });
   } catch (e) {}
 }

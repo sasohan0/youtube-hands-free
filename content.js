@@ -15,7 +15,7 @@ let lastQualityCheck = 0;
 let lastTheaterCheck = 0;
 let recognition = null;
 
-// Helper: Check if Extension Context is valid
+// Helper: Safely check if Extension Context is active
 function isContextValid() {
   try {
     return typeof chrome !== "undefined" && !!chrome.runtime && !!chrome.runtime.id;
@@ -24,7 +24,7 @@ function isContextValid() {
   }
 }
 
-// 1. Sync Settings with Storage
+// 1. Sync Settings with Storage (Safely Wrapped)
 if (isContextValid()) {
   try {
     chrome.storage.local.get(
@@ -40,6 +40,7 @@ if (isContextValid()) {
         isSpeedScrollEnabled: true,
       },
       (res) => {
+        if (chrome.runtime.lastError) return;
         if (!isContextValid()) return;
         settings = res;
         toggleVoiceEngine(settings.isVoiceControlEnabled);
@@ -89,6 +90,7 @@ function logSkipHistory() {
       chrome.storage.local.get(
         { skipCount: 0, skipHistory: [], timeSavedSeconds: 0 },
         (data) => {
+          if (chrome.runtime.lastError) return;
           if (!isContextValid()) return;
           const history = [
             {
@@ -102,11 +104,13 @@ function logSkipHistory() {
             ...data.skipHistory,
           ].slice(0, 5);
 
-          chrome.storage.local.set({
-            skipCount: data.skipCount + 1,
-            timeSavedSeconds: data.timeSavedSeconds + 15,
-            skipHistory: history,
-          });
+          try {
+            chrome.storage.local.set({
+              skipCount: data.skipCount + 1,
+              timeSavedSeconds: data.timeSavedSeconds + 15,
+              skipHistory: history,
+            });
+          } catch (e) {}
         },
       );
     } catch (e) {}

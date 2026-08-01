@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Transparent Background After Effects Motion Graphics Toolbar Icon Engine
-function renderAfterEffectsIcon() {
+// 2. Custom Vibing & Hand-Tapping Animated Toolbar Icon Engine
+function renderVibingHandsFreeIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -57,88 +57,140 @@ function renderAfterEffectsIcon() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Transparent Background Clear (No dark square background fill)
+    // 100% Transparent Background (No background fill)
     ctx.clearRect(0, 0, 32, 32);
 
     const time = frame * 0.12;
-    const cycle = Math.floor(frame / 32) % 3; // Morph between 3 icon motion scenes
+    const cycle = Math.floor(frame / 30) % 3; // Morph between 3 custom scenes
 
-    // After Effects Motion Graphic: Expanding Radial Shockwave Ring
-    const waveRadius = 3 + ((frame * 0.7) % 13);
-    const waveOpacity = 1 - waveRadius / 13;
-    ctx.strokeStyle = `rgba(255, 0, 80, ${waveOpacity * 0.7})`;
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.arc(16, 16, waveRadius, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Morphing Scene 1: Vibing Equalizer Spectrum Bars (Hands-Free Audio & Speech)
     if (cycle === 0) {
-      const h1 = 7 + Math.sin(time * 3.5) * 4;
-      const h2 = 12 + Math.cos(time * 4.5) * 5;
-      const h3 = 9 + Math.sin(time * 5.5) * 4;
-      const h4 = 6 + Math.cos(time * 3) * 3;
-
-      ctx.fillStyle = "#00F2FE";
-      ctx.fillRect(7, 16 - h1 / 2, 3, h1);
-      ctx.fillStyle = "#FF0050";
-      ctx.fillRect(12, 16 - h2 / 2, 3, h2);
-      ctx.fillStyle = "#8A2BE2";
-      ctx.fillRect(17, 16 - h3 / 2, 3, h3);
-      ctx.fillStyle = "#10B981";
-      ctx.fillRect(22, 16 - h4 / 2, 3, h4);
-    }
-    // Morphing Scene 2: Cyber Lightning Spark ⚡ (Fast-Forward Energy)
-    else if (cycle === 1) {
+      // SCENE 1: Floating Skip Button (⏭️)
+      const floatY = Math.sin(time * 4) * 2;
       ctx.save();
-      ctx.translate(16, 16);
-      const boltScale = 1 + Math.sin(time * 5) * 0.15;
-      ctx.scale(boltScale, boltScale);
+      ctx.translate(16, 16 + floatY);
 
-      const grad = ctx.createLinearGradient(-8, -8, 8, 8);
-      grad.addColorStop(0, "#FF0050");
-      grad.addColorStop(1, "#F59E0B");
-      ctx.fillStyle = grad;
+      // Skip Button Pill Container
+      ctx.fillStyle = "#FF0050";
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(-13, -8, 26, 16, 5);
+      } else {
+        ctx.rect(-13, -8, 26, 16);
+      }
+      ctx.fill();
+
+      // Skip Icon Arrows (⏭)
+      ctx.fillStyle = "#FFFFFF";
 
       ctx.beginPath();
-      ctx.moveTo(1, -9);
-      ctx.lineTo(-7, 2);
-      ctx.lineTo(-1, 2);
-      ctx.lineTo(-3, 9);
-      ctx.lineTo(7, -2);
-      ctx.lineTo(1, -2);
+      ctx.moveTo(-7, -4);
+      ctx.lineTo(-1, 0);
+      ctx.lineTo(-7, 4);
       ctx.closePath();
       ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-1, -4);
+      ctx.lineTo(5, 0);
+      ctx.lineTo(-1, 4);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillRect(5, -4, 2, 8);
+
       ctx.restore();
-    }
-    // Morphing Scene 3: Pulsing Play Button & Soundwave Arcs 🎧▶️
-    else {
+    } else if (cycle === 1) {
+      // SCENE 2: Hand Tapping the Skip Button 👆⏭️
+      const tapOffset = Math.sin(time * 8) > 0 ? 2 : 0;
       ctx.save();
       ctx.translate(16, 16);
 
-      // Play Core Triangle
-      ctx.fillStyle = "#FF0050";
+      // Skip Button Base
+      ctx.fillStyle = "rgba(255, 0, 80, 0.9)";
       ctx.beginPath();
-      ctx.moveTo(-4, -6);
-      ctx.lineTo(6, 0);
-      ctx.lineTo(-4, 6);
-      ctx.closePath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(-12, -10, 24, 14, 4);
+      } else {
+        ctx.rect(-12, -10, 24, 14);
+      }
       ctx.fill();
 
-      // Pulsing Dual Soundwave Arcs
-      const arcGlow = ctx.createLinearGradient(-12, -12, 12, 12);
-      arcGlow.addColorStop(0, "#8A2BE2");
-      arcGlow.addColorStop(1, "#00F2FE");
-      ctx.strokeStyle = arcGlow;
-      ctx.lineWidth = 2.2;
-
+      // Skip Arrow Icon
+      ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
-      ctx.arc(0, 0, 11, -Math.PI / 3, Math.PI / 3);
+      ctx.moveTo(-3, -7);
+      ctx.lineTo(3, -3);
+      ctx.lineTo(-3, 1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillRect(3, -7, 2, 8);
+
+      // Floating Hand Tapping Finger 👆
+      ctx.fillStyle = "#F59E0B";
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(-2, -3 + tapOffset, 4, 12, 2);
+      } else {
+        ctx.rect(-2, -3 + tapOffset, 4, 12);
+      }
+      ctx.fill();
+
+      // Click Shockwave Ripple Ring
+      if (tapOffset > 0) {
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(0, -3, 6, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    } else {
+      // SCENE 3: Vibing Emoji with Headphones, Closed Eyes & Smile 🎧😌🎵
+      const headBob = Math.sin(time * 5) * 1.5;
+      ctx.save();
+      ctx.translate(16, 16 + headBob);
+
+      // Yellow Emoji Head
+      ctx.fillStyle = "#F59E0B";
+      ctx.beginPath();
+      ctx.arc(0, 1, 9, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Closed Smiling Eyes (Arcs ^ ^)
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(-4, -1, 2.5, Math.PI, 0);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(0, 0, 11, (2 * Math.PI) / 3, (4 * Math.PI) / 3);
+      ctx.arc(4, -1, 2.5, Math.PI, 0);
       ctx.stroke();
+
+      // Happy Smile Arc 😊
+      ctx.beginPath();
+      ctx.arc(0, 2, 4, 0.1 * Math.PI, 0.9 * Math.PI);
+      ctx.stroke();
+
+      // Neon Headphones Arc
+      ctx.strokeStyle = "#00F2FE";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 11, Math.PI * 0.9, Math.PI * 2.1);
+      ctx.stroke();
+
+      // Headphone Ear Cups
+      ctx.fillStyle = "#FF0050";
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(-12, -2, 3, 7, 1);
+        ctx.roundRect(9, -2, 3, 7, 1);
+      } else {
+        ctx.rect(-12, -2, 3, 7);
+        ctx.rect(9, -2, 3, 7);
+      }
+      ctx.fill();
 
       ctx.restore();
     }
@@ -153,5 +205,5 @@ function renderAfterEffectsIcon() {
   } catch (e) {}
 }
 
-// 80ms Refresh Rate (~12.5 FPS smooth morphing)
-setInterval(renderAfterEffectsIcon, 80);
+// 90ms Refresh Rate for smooth scene transitions
+setInterval(renderVibingHandsFreeIcon, 90);

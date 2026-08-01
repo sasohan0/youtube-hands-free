@@ -3,26 +3,43 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <div class="glass-bg"></div>
     <div class="app-container">
+        <!-- Header -->
         <header class="app-header">
             <div class="logo-box">
                 <div class="logo-icon"></div>
+                <div class="glow-ring"></div>
             </div>
             <div class="header-text">
-                <h1>Youtube Hands Free</h1>
-                <span>Hardware Edition</span>
+                <div class="title-row">
+                    <h1>YouTube Hands Free</h1>
+                    <span class="badge-v3">v1.0 Pro</span>
+                </div>
+                <span class="header-subtitle">Hardware CDP & Voice Control</span>
             </div>
         </header>
 
-        <div class="toggles-wrapper">
+        <!-- Active Status Indicator -->
+        <div class="status-card">
+            <div class="status-pulse"></div>
+            <span id="statusText">System Active & Listening</span>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="toggles-wrapper glass-card">
+            <div class="section-label">Engine Controls</div>
+            
             <div class="toggle-row">
                 <div class="toggle-info">
-                    <span class="toggle-title">Master Switch</span>
-                    <span class="toggle-desc">Enable hardware ad skipping</span>
+                    <span class="toggle-title">Hardware Ad Skipper</span>
+                    <span class="toggle-desc">Simulate CDP mouse clicks</span>
                 </div>
                 <label class="switch">
                     <input type="checkbox" id="masterToggle">
@@ -32,7 +49,7 @@
 
             <div class="toggle-row">
                 <div class="toggle-info">
-                    <span class="toggle-title">Aggressive Fast-Forward</span>
+                    <span class="toggle-title">16x Fast-Forward</span>
                     <span class="toggle-desc">Speed through unskippable ads</span>
                 </div>
                 <label class="switch">
@@ -40,11 +57,39 @@
                     <span class="slider"></span>
                 </label>
             </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <span class="toggle-title">
+                        🎤 Voice Command Engine
+                        <span class="beta-tag">BETA</span>
+                    </span>
+                    <span class="toggle-desc">Hands-free speech recognition</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="voiceToggle">
+                    <span class="slider voice-slider"></span>
+                </label>
+            </div>
         </div>
 
-        <div class="stats-section">
+        <!-- Theme Selector -->
+        <div class="theme-section glass-card">
+            <div class="section-label">Glass Theme Preset</div>
+            <div class="theme-options">
+                <button class="theme-btn active" data-theme="neon">Neon Glass</button>
+                <button class="theme-btn" data-theme="cyber">Cyberpunk</button>
+                <button class="theme-btn" data-theme="obsidian">Obsidian</button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section glass-card">
             <div class="stats-header">
-                <div class="total-skipped">Total Skipped: <span id="totalSkipped">0</span></div>
+                <div class="total-skipped">
+                    <span class="stat-label">Total Skipped</span>
+                    <span class="stat-count" id="totalSkipped">0</span>
+                </div>
                 <button id="clearBtn">Clear</button>
             </div>
             <div class="history-container">

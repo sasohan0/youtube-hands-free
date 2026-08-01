@@ -109,8 +109,8 @@ function toggleAudioBooster(enable) {
 // 3. Clean 4K Frame Screenshot Engine (Hotkey: Alt+S & Player Bar Button 📸)
 function captureCleanScreenshot() {
   const video = document.querySelector("video");
-  if (!video || video.readyState < 2) {
-    showVoiceToast("Video not ready for screenshot 🔍");
+  if (!video) {
+    showVoiceToast("Video not found 🔍");
     return;
   }
 
@@ -130,7 +130,10 @@ function captureCleanScreenshot() {
     const link = document.createElement("a");
     link.download = `YouTube_${cleanTitle}_${timeStr}.png`;
     link.href = canvas.toDataURL("image/png");
+
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 
     showVoiceToast("Captured Clean 4K Frame Screenshot 📸");
   } catch (err) {
@@ -146,26 +149,29 @@ function injectScreenshotButton() {
   }
 
   const rightControls = document.querySelector(".ytp-right-controls");
-  if (!rightControls || document.getElementById("yt-handsfree-ss-btn")) return;
+  if (!rightControls) return;
 
-  const btn = document.createElement("button");
-  btn.id = "yt-handsfree-ss-btn";
-  btn.className = "ytp-button";
-  btn.title = "Capture Clean 4K Frame Screenshot (Alt+S)";
-  btn.style.cssText =
-    "display: inline-flex; align-items: center; justify-content: center; font-size: 16px; width: 36px; height: 100%; cursor: pointer; transition: transform 0.2s ease;";
-  btn.innerHTML = "📸";
+  let btn = document.getElementById("yt-handsfree-ss-btn");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "yt-handsfree-ss-btn";
+    btn.className = "ytp-button";
+    btn.title = "Capture Clean 4K Frame Screenshot (Alt+S)";
+    btn.style.cssText =
+      "display: inline-flex; align-items: center; justify-content: center; font-size: 18px; width: 36px; height: 100%; cursor: pointer; border: none; background: transparent; color: #fff; vertical-align: top; transition: transform 0.2s ease;";
+    btn.innerHTML = "📸";
 
-  btn.addEventListener("mouseenter", () => (btn.style.transform = "scale(1.2)"));
-  btn.addEventListener("mouseleave", () => (btn.style.transform = "scale(1.0)"));
+    btn.addEventListener("mouseenter", () => (btn.style.transform = "scale(1.25)"));
+    btn.addEventListener("mouseleave", () => (btn.style.transform = "scale(1.0)"));
 
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    captureCleanScreenshot();
-  });
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      captureCleanScreenshot();
+    });
 
-  rightControls.insertBefore(btn, rightControls.firstChild);
+    rightControls.insertBefore(btn, rightControls.firstChild);
+  }
 }
 
 // Hotkey Listener (Clean 4K Screenshot: Alt+S | Picture-in-Picture: Alt+P)

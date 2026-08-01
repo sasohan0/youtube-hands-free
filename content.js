@@ -4,10 +4,14 @@ let settings = {
   isVoiceControlEnabled: false,
   isUpcomingAlertEnabled: true,
   isHighBitrateEnabled: true,
+  isAutoTheaterEnabled: false,
+  isAntiDistractionEnabled: true,
+  isSpeedScrollEnabled: true,
 };
 let lastLogTime = 0;
 let lastAlertTime = 0;
 let lastQualityCheck = 0;
+let lastTheaterCheck = 0;
 let recognition = null;
 
 // 1. Sync Settings with UI Storage
@@ -18,10 +22,14 @@ chrome.storage.local.get(
     isVoiceControlEnabled: false,
     isUpcomingAlertEnabled: true,
     isHighBitrateEnabled: true,
+    isAutoTheaterEnabled: false,
+    isAntiDistractionEnabled: true,
+    isSpeedScrollEnabled: true,
   },
   (res) => {
     settings = res;
     toggleVoiceEngine(settings.isVoiceControlEnabled);
+    toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
   },
 );
 
@@ -34,6 +42,14 @@ chrome.storage.onChanged.addListener((changes) => {
     settings.isUpcomingAlertEnabled = changes.isUpcomingAlertEnabled.newValue;
   if (changes.isHighBitrateEnabled)
     settings.isHighBitrateEnabled = changes.isHighBitrateEnabled.newValue;
+  if (changes.isAutoTheaterEnabled)
+    settings.isAutoTheaterEnabled = changes.isAutoTheaterEnabled.newValue;
+  if (changes.isSpeedScrollEnabled)
+    settings.isSpeedScrollEnabled = changes.isSpeedScrollEnabled.newValue;
+  if (changes.isAntiDistractionEnabled) {
+    settings.isAntiDistractionEnabled = changes.isAntiDistractionEnabled.newValue;
+    toggleAntiDistractionCSS(settings.isAntiDistractionEnabled);
+  }
   if (changes.isVoiceControlEnabled) {
     settings.isVoiceControlEnabled = changes.isVoiceControlEnabled.newValue;
     toggleVoiceEngine(settings.isVoiceControlEnabled);
@@ -120,7 +136,6 @@ function checkUpcomingAds() {
   });
 }
 
-// Glassmorphic Floating Tooltip Announcement for Upcoming Ads
 function showUpcomingAdTooltip(secondsRemaining) {
   let tooltip = document.getElementById("yt-upcoming-ad-tooltip");
   if (!tooltip) {
@@ -203,11 +218,62 @@ function enforceHighBitrateQuality() {
   } catch (e) {}
 }
 
-// 6. Main Execution Loop for Ad Skipping & Monitoring
+// 6. Auto Theater Mode Engine
+function enforceAutoTheater() {
+  if (!settings.isAutoTheaterEnabled) return;
+  if (Date.now() - lastTheaterCheck < 5000) return;
+  lastTheaterCheck = Date.now();
+
+  const sizeBtn = document.querySelector(".ytp-size-button");
+  if (sizeBtn && sizeBtn.title && sizeBtn.title.toLowerCase().includes("theater")) {
+    sizeBtn.click();
+  }
+}
+
+// 7. Anti-Distraction Engine (Hides Shorts shelves & Premium promos)
+function toggleAntiDistractionCSS(enable) {
+  let styleEl = document.getElementById("yt-handsfree-antidistraction-style");
+  if (enable) {
+    if (!styleEl) {
+      styleEl = document.createElement("style");
+      styleEl.id = "yt-handsfree-antidistraction-style";
+      styleEl.textContent = `
+        ytd-rich-section-renderer,
+        ytd-reel-shelf-renderer,
+        yt-mealbar-promo-renderer,
+        ytd-popup-container ytd-action-companion-ad-renderer {
+          display: none !important;
+        }
+      `;
+      document.head.appendChild(styleEl);
+    }
+  } else {
+    if (styleEl) styleEl.remove();
+  }
+}
+
+// 8. Shift + Scroll Speed Controller Engine
+document.addEventListener("wheel", (e) => {
+  if (!settings.isSpeedScrollEnabled || !e.shiftKey) return;
+
+  const video = document.querySelector("video");
+  if (!video) return;
+
+  e.preventDefault();
+
+  let delta = e.deltaY < 0 ? 0.25 : -0.25;
+  let newRate = Math.min(Math.max(video.playbackRate + delta, 0.25), 4.0);
+  video.playbackRate = parseFloat(newRate.toFixed(2));
+
+  showVoiceToast(`Speed: ${video.playbackRate}x ⚡`);
+}, { passive: false });
+
+// 9. Main Execution Loop for Ad Skipping & Monitoring
 setInterval(() => {
   predictVideoAds();
   checkUpcomingAds();
   enforceHighBitrateQuality();
+  enforceAutoTheater();
 
   if (!settings.isSkipperEnabled) return;
 
@@ -254,7 +320,7 @@ setInterval(() => {
   });
 }, 300);
 
-// 7. Voice Command Recognition Engine
+// 10. Voice Command Recognition Engine
 function toggleVoiceEngine(enable) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -360,7 +426,7 @@ function handleVoiceCommand(command) {
   }
 }
 
-// Glassmorphic Voice Toast Notification on YouTube Player
+// Glassmorphic Voice & Speed Toast Notification on YouTube Player
 function showVoiceToast(text) {
   let toast = document.getElementById("yt-handsfree-toast");
   if (!toast) {
@@ -392,7 +458,7 @@ function showVoiceToast(text) {
     document.body.appendChild(toast);
   }
 
-  toast.innerHTML = `<span>🎤 Voice Command:</span> <span style="color: #ff3377;">${text}</span>`;
+  toast.innerHTML = `<span>⚡ Hands Free:</span> <span style="color: #ff3377;">${text}</span>`;
   toast.style.opacity = "1";
   toast.style.transform = "translateY(0)";
 

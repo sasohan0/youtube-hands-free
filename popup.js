@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const voiceToggle = document.getElementById("voiceToggle");
   const upcomingAdToggle = document.getElementById("upcomingAdToggle");
   const highBitrateToggle = document.getElementById("highBitrateToggle");
+  const autoTheaterToggle = document.getElementById("autoTheaterToggle");
+  const antiDistractionToggle = document.getElementById("antiDistractionToggle");
+  const speedScrollToggle = document.getElementById("speedScrollToggle");
   const totalSkippedEl = document.getElementById("totalSkipped");
   const historyListEl = document.getElementById("historyList");
   const clearBtn = document.getElementById("clearBtn");
@@ -20,6 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
       isVoiceControlEnabled: false,
       isUpcomingAlertEnabled: true,
       isHighBitrateEnabled: true,
+      isAutoTheaterEnabled: false,
+      isAntiDistractionEnabled: true,
+      isSpeedScrollEnabled: true,
       selectedTheme: "neon",
       predictedAdCount: 0,
       timeSavedSeconds: 0,
@@ -30,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
       voiceToggle.checked = result.isVoiceControlEnabled;
       upcomingAdToggle.checked = result.isUpcomingAlertEnabled;
       highBitrateToggle.checked = result.isHighBitrateEnabled;
+      autoTheaterToggle.checked = result.isAutoTheaterEnabled;
+      antiDistractionToggle.checked = result.isAntiDistractionEnabled;
+      speedScrollToggle.checked = result.isSpeedScrollEnabled;
 
       applyTheme(result.selectedTheme);
       updateStatusText(result.isSkipperEnabled, result.isVoiceControlEnabled);
@@ -63,6 +72,24 @@ document.addEventListener("DOMContentLoaded", () => {
   highBitrateToggle.addEventListener("change", () => {
     chrome.storage.local.set({
       isHighBitrateEnabled: highBitrateToggle.checked,
+    });
+  });
+
+  autoTheaterToggle.addEventListener("change", () => {
+    chrome.storage.local.set({
+      isAutoTheaterEnabled: autoTheaterToggle.checked,
+    });
+  });
+
+  antiDistractionToggle.addEventListener("change", () => {
+    chrome.storage.local.set({
+      isAntiDistractionEnabled: antiDistractionToggle.checked,
+    });
+  });
+
+  speedScrollToggle.addEventListener("change", () => {
+    chrome.storage.local.set({
+      isSpeedScrollEnabled: speedScrollToggle.checked,
     });
   });
 

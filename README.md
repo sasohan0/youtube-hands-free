@@ -3,7 +3,7 @@
 <img src="assets/banner.png" alt="Youtube Hands Free Banner" width="100%" style="border-radius: 10px;" />
 
 # ⚡ YouTube Hands Free
-### Raycast Designer Motion Icon, Hardware CDP, AI Voice & 4K Lock Engine
+### Hardware CDP, AI Voice, 4K Lock, Auto-Theater & Anti-Distraction Suite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -11,9 +11,9 @@
 [![GitHub Stars](https://img.shields.io/github/stars/sasohan0/youtube-hands-free?style=social)](https://github.com/sasohan0/youtube-hands-free)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, and a **Max-Visibility Raycast Designer Motion Icon Engine**.
+**YouTube Hands Free** is an ultra-sleek, zero-latency Chrome extension that automatically bypasses, skips, and fast-forwards YouTube video ads using **hardware-level Chrome DevTools Protocol (CDP)** inputs, an **AI Voice Command Engine**, a **High Bitrate 4K Stream Lock**, **Auto-Theater Mode**, **Anti-Distraction Mode**, and a **Raycast Designer Motion Icon Engine**.
 
-[Features](#-key-features) • [Raycast Motion Icon](#-raycastlinear-designer-motion-icon) • [High Bitrate 4K Lock](#-high-bitrate--4k-quality-lock) • [Ad Predictor & Alert](#-ad-predictor--upcoming-alert) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
+[Features](#-key-features) • [Power Tools Suite](#-cinema--power-tools-suite) • [Raycast Motion Icon](#-raycastlinear-designer-motion-icon) • [Voice Commands](#-voice-command-engine) • [Installation](#-installation-guide)
 
 </div>
 
@@ -23,44 +23,34 @@
 
 <div align="center">
   <img src="assets/dashboard.png" alt="YouTube Hands Free Dark Glassmorphic UI Dashboard" width="480px" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
-  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Max-Visibility Raycast Motion Icon, 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
+  <p><em>Ultra-sleek Dark Glassmorphic Control Center with Power Tools (Auto-Theater, Anti-Distraction, Speed Scroll), 4K Quality Lock, Ad Predictor, Time Saved counter, and Glass presets.</em></p>
 </div>
 
 ---
 
 ## ✨ Key Features
 
-- 💫 **Max-Visibility Raycast Motion Icon**: Prominent 60 FPS micro-pulse animation in the Chrome toolbar. Features a full-grid **Radar Sweep Beam** (`#00F2FE` -> `#FF0050` conic gradient sweep), enlarged 28x28px dark card base, breathing spring physics, and an elastic **Snap Burst Wave** on ad bypass.
 - 🎯 **Hardware-Level Click Simulation**: Bypasses YouTube's programmatic event detection by dispatching OS-level `Input.dispatchMouseEvent` via Chrome Debugger.
 - 🎬 **High Bitrate & 4K Stream Lock**: Automatically locks YouTube player playback to maximum available quality (`2160p 4K`, `1440p 2K`, or `1080p60 Premium`), preventing YouTube from auto-downgrading resolutions.
+- 🎭 **Auto-Theater Mode**: Automatically expands YouTube player into full Cinema / Theater Mode when a video starts playing.
+- 🛡️ **Anti-Distraction Suite**: Automatically suppresses YouTube Shorts shelves, Premium upgrade popups, and promotional survey banners.
+- ⚡ **Shift + Scroll Speed Controller**: Hold `Shift` and scroll anywhere over the video player to smoothly adjust playback speed (`0.25x` to `4.00x`) with a Glass Toast HUD alert.
 - 🔮 **Ad Break Predictor Engine**: Scans YouTube timeline markers and video duration to predict total upcoming ad breaks.
 - 🔔 **Upcoming Ad Announcement HUD**: Displays an on-screen Glass Tooltip notification 5s before an ad break triggers (`⚡ Upcoming Ad in ~5s`).
 - ⏱️ **Time Saved Counter**: Automatically calculates and displays cumulative seconds/minutes saved from skipped & accelerated ads.
 - 🎤 **Hands-Free Voice Command Engine**: Control playback and skip ads effortlessly using real-time speech recognition ("Skip", "Pause", "Play", "Mute", "Speed up").
 - ⏩ **16x Speed Unskippable Ad Fast-Forwarding**: Instantly speeds through unskippable ads at 16.0x playback rate while auto-muting rapid audio.
-- 🎨 **Glassmorphic Multi-Theme Presets**: Switch between **Neon Glass**, **Cyberpunk**, and **Obsidian** dark glass themes with custom backdrop blur and hover shine sweep effects.
+- 💫 **Max-Visibility Raycast Motion Icon**: Prominent 60 FPS micro-pulse animation in Chrome toolbar featuring a continuous conic radar sweep beam.
 
 ---
 
-## 💫 Raycast/Linear Designer Motion Icon
+## 🎭 Cinema & Power Tools Suite
 
-Designed following top-tier product design principles (Raycast, Linear, Apple macOS Menubar design systems):
-
-```text
-  [Active Listening State]               [Ad Skip Execution Burst]
-   🌀 Conic Radar Sweep Ring              ⚡ Elastic Spin Snap (180°)
-   Cyan/Red gradient sweep beam           Expanding Shockwave Burst Ring
-```
-
-1. **Full Grid Conic Radar Sweep**: A subtle, 60 FPS conic gradient ring (`#00F2FE` -> `#FF0050` -> `#8A2BE2`) continuously sweeps around the icon perimeter.
-2. **Spring Breathing Physics**: Smooth `Math.sin()` cubic-bezier breathing motion indicating live system monitoring.
-3. **Elastic Execution Snap**: Flashes a neon `SKIP` badge and triggers a 180° elastic snap spin + shockwave burst when an ad is bypassed.
-
----
-
-## 🎬 High Bitrate & 4K Quality Lock
-
-YouTube often defaults to auto-resolution downgrades (`480p`/`720p`) when switching tabs or during minor network fluctuations. **YouTube Hands Free** continuously interfaces with YouTube's HTML5 Player API (`setPlaybackQualityRange`) to enforce max resolution & 60fps streams.
+| Power Feature | Behavior | Benefit |
+| :--- | :--- | :--- |
+| **Auto Theater Mode** | Clicks `.ytp-size-button` on video load | Immersive full-width cinema experience |
+| **Anti-Distraction Mode** | Blocks Shorts shelves & Premium nag popups | Clean, focused YouTube browsing |
+| **Shift + Scroll Speed** | `Shift + Wheel` over video player | Instant fine-tuned speed control (`0.25x` - `4.0x`) |
 
 ---
 
@@ -102,7 +92,7 @@ Activate the **Voice Command Engine** toggle in the popup to speak commands dire
 4. **Reload Unpacked Extension**:
    - Click **Load unpacked** (or click the **Reload ↺** refresh icon on the `YouTube Hands Free` card).
 
-5. **Enjoy Raycast-Grade 4K Hands-Free YouTube!** 🎉
+5. **Enjoy Power-Packed 4K Hands-Free YouTube!** 🎉
 
 ---
 

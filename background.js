@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // Show temporary SKIP badge on animated extension icon
     chrome.action.setBadgeText({ text: "SKIP" });
-    chrome.action.setBadgeBackgroundColor({ color: "#00F2FE" });
+    chrome.action.setBadgeBackgroundColor({ color: "#FF0050" });
     setTimeout(() => {
       chrome.action.setBadgeText({ text: "" });
     }, 1800);
@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Large Scale Cyberpunk Animated Motion Toolbar Icon Engine
-function renderLargeCyberpunkMotionIcon() {
+// 2. Clean Minimal Vector Animated Toolbar Icon Engine
+function renderCleanVectorMotionIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -57,108 +57,119 @@ function renderLargeCyberpunkMotionIcon() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // 100% Transparent Background (No background fill)
+    // Transparent Background
     ctx.clearRect(0, 0, 32, 32);
 
     const time = frame * 0.12;
-    const cycle = Math.floor(frame / 30) % 3; // Morph between 3 custom scenes
+    const cycle = Math.floor(frame / 30) % 3;
 
     if (cycle === 0) {
-      // SCENE 1: Large Floating Modern Gray-Black Skip Button (⏭️)
-      const floatY = Math.sin(time * 4) * 1.5;
+      // SCENE 1: Clean Minimal Vector Skip Icon (⏩)
+      const floatY = Math.sin(time * 3.5) * 1.2;
       ctx.save();
       ctx.translate(16, 16 + floatY);
 
-      // Large Modern Gray-Black Pill Container (29x18)
-      ctx.fillStyle = "#161b26";
-      ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 1.2;
+      // Dark Slate Rounded Card Base
+      ctx.fillStyle = "#0D1117";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-14.5, -9, 29, 18, 5);
+        ctx.roundRect(-14, -14, 28, 28, 7);
       } else {
-        ctx.rect(-14.5, -9, 29, 18);
+        ctx.rect(-14, -14, 28, 28);
       }
       ctx.fill();
       ctx.stroke();
 
-      // Large Crisp White Skip Arrows (⏭)
+      // Clean White Triangle 1
       ctx.fillStyle = "#FFFFFF";
-
       ctx.beginPath();
-      ctx.moveTo(-8, -5);
+      ctx.moveTo(-9, -6);
       ctx.lineTo(-1, 0);
-      ctx.lineTo(-8, 5);
+      ctx.lineTo(-9, 6);
       ctx.closePath();
       ctx.fill();
 
+      // Clean White Triangle 2
       ctx.beginPath();
-      ctx.moveTo(-1, -5);
-      ctx.lineTo(6, 0);
-      ctx.lineTo(-1, 5);
+      ctx.moveTo(-1, -6);
+      ctx.lineTo(7, 0);
+      ctx.lineTo(-1, 6);
       ctx.closePath();
       ctx.fill();
 
-      ctx.fillRect(6, -5, 2.5, 10);
+      // YouTube Red Accent Bar
+      ctx.fillStyle = "#FF0050";
+      ctx.fillRect(7, -6, 2.5, 12);
+
+      // Electric Cyan Minimal Arc Accent
+      ctx.strokeStyle = "#00F2FE";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(0, 0, 11, -Math.PI / 4, Math.PI / 4);
+      ctx.stroke();
 
       ctx.restore();
     } else if (cycle === 1) {
-      // SCENE 2: Cyber Hand Tapping Large Gray-Black Skip Button 👆⏭️
+      // SCENE 2: Cyber Metallic Hand Tapping Skip Icon 👆⏩
       const tapOffset = Math.sin(time * 8) > 0 ? 2 : 0;
       ctx.save();
       ctx.translate(16, 16);
 
-      // Large Modern Gray-Black Skip Button Base
-      ctx.fillStyle = "#161b26";
-      ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 1.2;
+      // Card Base
+      ctx.fillStyle = "#0D1117";
+      ctx.strokeStyle = "#00F2FE";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-14, -11, 28, 16, 5);
+        ctx.roundRect(-14, -14, 28, 28, 7);
       } else {
-        ctx.rect(-14, -11, 28, 16);
+        ctx.rect(-14, -14, 28, 28);
       }
       ctx.fill();
       ctx.stroke();
 
-      // Skip Arrow Icon
+      // Skip Arrow
       ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
-      ctx.moveTo(-4, -8);
-      ctx.lineTo(3, -3);
-      ctx.lineTo(-4, 2);
+      ctx.moveTo(-5, -6);
+      ctx.lineTo(2, 0);
+      ctx.lineTo(-5, 6);
       ctx.closePath();
       ctx.fill();
-      ctx.fillRect(3, -8, 2.5, 10);
 
-      // Enlarged Cyber Metallic Hand Finger Tapping
-      ctx.fillStyle = "#00F2FE"; // Neon Cyan cyber finger
+      ctx.fillStyle = "#FF0050";
+      ctx.fillRect(2, -6, 2.5, 12);
+
+      // Cyber Tapping Finger
+      ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-2.5, -3 + tapOffset, 5, 14, 2.5);
+        ctx.roundRect(-2.5, -4 + tapOffset, 5, 14, 2.5);
       } else {
-        ctx.rect(-2.5, -3 + tapOffset, 5, 14);
+        ctx.rect(-2.5, -4 + tapOffset, 5, 14);
       }
       ctx.fill();
 
-      // Click Shockwave Ripple Ring
+      // Tap Shockwave Ring
       if (tapOffset > 0) {
         ctx.strokeStyle = "rgba(0, 242, 254, 0.9)";
-        ctx.lineWidth = 1.8;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.arc(0, -3, 8, 0, Math.PI * 2);
+        ctx.arc(0, -4, 7, 0, Math.PI * 2);
         ctx.stroke();
       }
 
       ctx.restore();
     } else {
-      // SCENE 3: Large Cyberpunk Vibing Emoji with Visor & Headphones (Maximized size) 🎧😎
+      // SCENE 3: Minimal Clean Cyberpunk Visor Emoji 🎧😎
       const headBob = Math.sin(time * 5) * 1.2;
       ctx.save();
       ctx.translate(16, 16 + headBob);
 
-      // Large Dark Obsidian Emoji Face Base (Radius 12, filling bounds)
-      ctx.fillStyle = "#0f172a";
+      // Dark Slate Head Base
+      ctx.fillStyle = "#0D1117";
       ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 1.2;
       ctx.beginPath();
@@ -166,31 +177,31 @@ function renderLargeCyberpunkMotionIcon() {
       ctx.fill();
       ctx.stroke();
 
-      // Large Neon Cyan Visor Glasses 😎
+      // Clean Neon Cyan Visor Glasses 😎
       ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-9, -4, 18, 7, 2.5);
+        ctx.roundRect(-9, -4, 18, 6, 2);
       } else {
-        ctx.rect(-9, -4, 18, 7);
+        ctx.rect(-9, -4, 18, 6);
       }
       ctx.fill();
 
-      // Glowing Neon Magenta Smile Mouth
-      ctx.strokeStyle = "#FF007F";
-      ctx.lineWidth = 2;
+      // YouTube Red Smile Mouth
+      ctx.strokeStyle = "#FF0050";
+      ctx.lineWidth = 1.8;
       ctx.beginPath();
       ctx.arc(0, 2, 5, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.stroke();
 
-      // Large Neon Magenta Cyber Headphones Arc
-      ctx.strokeStyle = "#FF007F";
-      ctx.lineWidth = 2.5;
+      // Neon Magenta Headphones Arc
+      ctx.strokeStyle = "#FF0050";
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
       ctx.arc(0, -1, 14, Math.PI * 0.9, Math.PI * 2.1);
       ctx.stroke();
 
-      // Enlarged Cyber Ear Cups
+      // Cyber Ear Cups
       ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
@@ -205,7 +216,7 @@ function renderLargeCyberpunkMotionIcon() {
       ctx.restore();
     }
 
-    // Output Frame to Extension Bar Icon
+    // Output Frame
     const imageData = ctx.getImageData(0, 0, 32, 32);
     chrome.action.setIcon({ imageData: imageData }, () => {
       if (chrome.runtime.lastError) {}
@@ -215,5 +226,4 @@ function renderLargeCyberpunkMotionIcon() {
   } catch (e) {}
 }
 
-// 90ms Refresh Rate for smooth cyberpunk scene transitions
-setInterval(renderLargeCyberpunkMotionIcon, 90);
+setInterval(renderCleanVectorMotionIcon, 90);

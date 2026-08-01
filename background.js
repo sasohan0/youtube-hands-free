@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Cyberpunk Animated Motion Toolbar Icon Engine
-function renderCyberpunkMotionIcon() {
+// 2. Large Scale Cyberpunk Animated Motion Toolbar Icon Engine
+function renderLargeCyberpunkMotionIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -64,59 +64,59 @@ function renderCyberpunkMotionIcon() {
     const cycle = Math.floor(frame / 30) % 3; // Morph between 3 custom scenes
 
     if (cycle === 0) {
-      // SCENE 1: Floating Modern Gray-Black Skip Button (⏭️)
-      const floatY = Math.sin(time * 4) * 2;
+      // SCENE 1: Large Floating Modern Gray-Black Skip Button (⏭️)
+      const floatY = Math.sin(time * 4) * 1.5;
       ctx.save();
       ctx.translate(16, 16 + floatY);
 
-      // Modern Gray-Black Pill Container
+      // Large Modern Gray-Black Pill Container (29x18)
       ctx.fillStyle = "#161b26";
-      ctx.strokeStyle = "#334155";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-13, -8, 26, 16, 5);
+        ctx.roundRect(-14.5, -9, 29, 18, 5);
       } else {
-        ctx.rect(-13, -8, 26, 16);
+        ctx.rect(-14.5, -9, 29, 18);
       }
       ctx.fill();
       ctx.stroke();
 
-      // Crisp White Skip Arrows (⏭)
+      // Large Crisp White Skip Arrows (⏭)
       ctx.fillStyle = "#FFFFFF";
 
       ctx.beginPath();
-      ctx.moveTo(-7, -4);
+      ctx.moveTo(-8, -5);
       ctx.lineTo(-1, 0);
-      ctx.lineTo(-7, 4);
+      ctx.lineTo(-8, 5);
       ctx.closePath();
       ctx.fill();
 
       ctx.beginPath();
-      ctx.moveTo(-1, -4);
-      ctx.lineTo(5, 0);
-      ctx.lineTo(-1, 4);
+      ctx.moveTo(-1, -5);
+      ctx.lineTo(6, 0);
+      ctx.lineTo(-1, 5);
       ctx.closePath();
       ctx.fill();
 
-      ctx.fillRect(5, -4, 2, 8);
+      ctx.fillRect(6, -5, 2.5, 10);
 
       ctx.restore();
     } else if (cycle === 1) {
-      // SCENE 2: Cyber Hand Tapping Modern Gray-Black Skip Button 👆⏭️
+      // SCENE 2: Cyber Hand Tapping Large Gray-Black Skip Button 👆⏭️
       const tapOffset = Math.sin(time * 8) > 0 ? 2 : 0;
       ctx.save();
       ctx.translate(16, 16);
 
-      // Modern Gray-Black Skip Button Base
+      // Large Modern Gray-Black Skip Button Base
       ctx.fillStyle = "#161b26";
       ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-12, -10, 24, 14, 4);
+        ctx.roundRect(-14, -11, 28, 16, 5);
       } else {
-        ctx.rect(-12, -10, 24, 14);
+        ctx.rect(-14, -11, 28, 16);
       }
       ctx.fill();
       ctx.stroke();
@@ -124,81 +124,81 @@ function renderCyberpunkMotionIcon() {
       // Skip Arrow Icon
       ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
-      ctx.moveTo(-3, -7);
+      ctx.moveTo(-4, -8);
       ctx.lineTo(3, -3);
-      ctx.lineTo(-3, 1);
+      ctx.lineTo(-4, 2);
       ctx.closePath();
       ctx.fill();
-      ctx.fillRect(3, -7, 2, 8);
+      ctx.fillRect(3, -8, 2.5, 10);
 
-      // Cyber Metallic Hand Finger Tapping
+      // Enlarged Cyber Metallic Hand Finger Tapping
       ctx.fillStyle = "#00F2FE"; // Neon Cyan cyber finger
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-2, -3 + tapOffset, 4, 12, 2);
+        ctx.roundRect(-2.5, -3 + tapOffset, 5, 14, 2.5);
       } else {
-        ctx.rect(-2, -3 + tapOffset, 4, 12);
+        ctx.rect(-2.5, -3 + tapOffset, 5, 14);
       }
       ctx.fill();
 
       // Click Shockwave Ripple Ring
       if (tapOffset > 0) {
-        ctx.strokeStyle = "rgba(0, 242, 254, 0.85)";
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = "rgba(0, 242, 254, 0.9)";
+        ctx.lineWidth = 1.8;
         ctx.beginPath();
-        ctx.arc(0, -3, 6, 0, Math.PI * 2);
+        ctx.arc(0, -3, 8, 0, Math.PI * 2);
         ctx.stroke();
       }
 
       ctx.restore();
     } else {
-      // SCENE 3: Cyberpunk Vibing Emoji with Neon Visor & Headphones 🎧😎
-      const headBob = Math.sin(time * 5) * 1.5;
+      // SCENE 3: Large Cyberpunk Vibing Emoji with Visor & Headphones (Maximized size) 🎧😎
+      const headBob = Math.sin(time * 5) * 1.2;
       ctx.save();
       ctx.translate(16, 16 + headBob);
 
-      // Dark Obsidian Emoji Face Base
+      // Large Dark Obsidian Emoji Face Base (Radius 12, filling bounds)
       ctx.fillStyle = "#0f172a";
       ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.arc(0, 1, 9, 0, Math.PI * 2);
+      ctx.arc(0, 0, 12, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
 
-      // Neon Cyan Visor Glasses 😎
+      // Large Neon Cyan Visor Glasses 😎
       ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-7, -3, 14, 5, 2);
+        ctx.roundRect(-9, -4, 18, 7, 2.5);
       } else {
-        ctx.rect(-7, -3, 14, 5);
+        ctx.rect(-9, -4, 18, 7);
       }
       ctx.fill();
 
       // Glowing Neon Magenta Smile Mouth
       ctx.strokeStyle = "#FF007F";
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(0, 2, 4, 0.15 * Math.PI, 0.85 * Math.PI);
+      ctx.arc(0, 2, 5, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.stroke();
 
-      // Neon Magenta Cyber Headphones Arc
+      // Large Neon Magenta Cyber Headphones Arc
       ctx.strokeStyle = "#FF007F";
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
-      ctx.arc(0, 0, 11, Math.PI * 0.9, Math.PI * 2.1);
+      ctx.arc(0, -1, 14, Math.PI * 0.9, Math.PI * 2.1);
       ctx.stroke();
 
-      // Cyber Ear Cups
+      // Enlarged Cyber Ear Cups
       ctx.fillStyle = "#00F2FE";
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-12, -2, 3, 7, 1);
-        ctx.roundRect(9, -2, 3, 7, 1);
+        ctx.roundRect(-15, -4, 3.5, 9, 1.5);
+        ctx.roundRect(11.5, -4, 3.5, 9, 1.5);
       } else {
-        ctx.rect(-12, -2, 3, 7);
-        ctx.rect(9, -2, 3, 7);
+        ctx.rect(-15, -4, 3.5, 9);
+        ctx.rect(11.5, -4, 3.5, 9);
       }
       ctx.fill();
 
@@ -216,4 +216,4 @@ function renderCyberpunkMotionIcon() {
 }
 
 // 90ms Refresh Rate for smooth cyberpunk scene transitions
-setInterval(renderCyberpunkMotionIcon, 90);
+setInterval(renderLargeCyberpunkMotionIcon, 90);

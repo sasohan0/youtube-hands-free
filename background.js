@@ -1,16 +1,21 @@
-let frame = 0;
+let angle = 0;
+let isSkipping = false;
+let skipAnimProgress = 0;
 
 // 1. Hardware Clicker Service via CDP
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "hardware_click" && sender.tab) {
     const tabId = sender.tab.id;
 
-    // Show temporary SKIP badge on animated extension icon
+    // Trigger Raycast-style Instant Execution Snap & Neon Ripple Burst
+    isSkipping = true;
+    skipAnimProgress = 0;
+
     chrome.action.setBadgeText({ text: "SKIP" });
     chrome.action.setBadgeBackgroundColor({ color: "#FF0050" });
     setTimeout(() => {
       chrome.action.setBadgeText({ text: "" });
-    }, 1800);
+    }, 1500);
 
     chrome.debugger.attach({ tabId: tabId }, "1.3", () => {
       if (chrome.runtime.lastError) return;
@@ -48,8 +53,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 2. Clean Minimal Vector Animated Toolbar Icon Engine
-function renderCleanVectorMotionIcon() {
+// 2. Linear / Raycast World-Class Product Designer Icon Engine (32x32 OffscreenCanvas)
+function renderRaycastDesignerIcon() {
   try {
     if (typeof OffscreenCanvas === "undefined") return;
 
@@ -57,173 +62,112 @@ function renderCleanVectorMotionIcon() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Transparent Background
     ctx.clearRect(0, 0, 32, 32);
 
-    const time = frame * 0.12;
-    const cycle = Math.floor(frame / 30) % 3;
+    const center = 16;
+    angle = (angle + 4) % 360;
 
-    if (cycle === 0) {
-      // SCENE 1: Clean Minimal Vector Skip Icon (⏩)
-      const floatY = Math.sin(time * 3.5) * 1.2;
-      ctx.save();
-      ctx.translate(16, 16 + floatY);
+    // Smooth Breathing Pulse Ease (1.0 to 1.15)
+    const breath = 1 + Math.sin((angle * Math.PI) / 90) * 0.06;
 
-      // Dark Slate Rounded Card Base
-      ctx.fillStyle = "#0D1117";
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-14, -14, 28, 28, 7);
+    // Handle Skip Action Snap Burst
+    let spinAngle = 0;
+    let burstScale = 1;
+    if (isSkipping) {
+      skipAnimProgress += 0.08;
+      if (skipAnimProgress >= 1) {
+        isSkipping = false;
+        skipAnimProgress = 0;
       } else {
-        ctx.rect(-14, -14, 28, 28);
+        // Spring Elastic Snap Physics
+        spinAngle = Math.sin(skipAnimProgress * Math.PI) * Math.PI;
+        burstScale = 1 + Math.sin(skipAnimProgress * Math.PI) * 0.25;
       }
-      ctx.fill();
-      ctx.stroke();
-
-      // Clean White Triangle 1
-      ctx.fillStyle = "#FFFFFF";
-      ctx.beginPath();
-      ctx.moveTo(-9, -6);
-      ctx.lineTo(-1, 0);
-      ctx.lineTo(-9, 6);
-      ctx.closePath();
-      ctx.fill();
-
-      // Clean White Triangle 2
-      ctx.beginPath();
-      ctx.moveTo(-1, -6);
-      ctx.lineTo(7, 0);
-      ctx.lineTo(-1, 6);
-      ctx.closePath();
-      ctx.fill();
-
-      // YouTube Red Accent Bar
-      ctx.fillStyle = "#FF0050";
-      ctx.fillRect(7, -6, 2.5, 12);
-
-      // Electric Cyan Minimal Arc Accent
-      ctx.strokeStyle = "#00F2FE";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.arc(0, 0, 11, -Math.PI / 4, Math.PI / 4);
-      ctx.stroke();
-
-      ctx.restore();
-    } else if (cycle === 1) {
-      // SCENE 2: Cyber Metallic Hand Tapping Skip Icon 👆⏩
-      const tapOffset = Math.sin(time * 8) > 0 ? 2 : 0;
-      ctx.save();
-      ctx.translate(16, 16);
-
-      // Card Base
-      ctx.fillStyle = "#0D1117";
-      ctx.strokeStyle = "#00F2FE";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-14, -14, 28, 28, 7);
-      } else {
-        ctx.rect(-14, -14, 28, 28);
-      }
-      ctx.fill();
-      ctx.stroke();
-
-      // Skip Arrow
-      ctx.fillStyle = "#FFFFFF";
-      ctx.beginPath();
-      ctx.moveTo(-5, -6);
-      ctx.lineTo(2, 0);
-      ctx.lineTo(-5, 6);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#FF0050";
-      ctx.fillRect(2, -6, 2.5, 12);
-
-      // Cyber Tapping Finger
-      ctx.fillStyle = "#00F2FE";
-      ctx.beginPath();
-      if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-2.5, -4 + tapOffset, 5, 14, 2.5);
-      } else {
-        ctx.rect(-2.5, -4 + tapOffset, 5, 14);
-      }
-      ctx.fill();
-
-      // Tap Shockwave Ring
-      if (tapOffset > 0) {
-        ctx.strokeStyle = "rgba(0, 242, 254, 0.9)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(0, -4, 7, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    } else {
-      // SCENE 3: Minimal Clean Cyberpunk Visor Emoji 🎧😎
-      const headBob = Math.sin(time * 5) * 1.2;
-      ctx.save();
-      ctx.translate(16, 16 + headBob);
-
-      // Dark Slate Head Base
-      ctx.fillStyle = "#0D1117";
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.arc(0, 0, 12, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      // Clean Neon Cyan Visor Glasses 😎
-      ctx.fillStyle = "#00F2FE";
-      ctx.beginPath();
-      if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-9, -4, 18, 6, 2);
-      } else {
-        ctx.rect(-9, -4, 18, 6);
-      }
-      ctx.fill();
-
-      // YouTube Red Smile Mouth
-      ctx.strokeStyle = "#FF0050";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.arc(0, 2, 5, 0.15 * Math.PI, 0.85 * Math.PI);
-      ctx.stroke();
-
-      // Neon Magenta Headphones Arc
-      ctx.strokeStyle = "#FF0050";
-      ctx.lineWidth = 2.2;
-      ctx.beginPath();
-      ctx.arc(0, -1, 14, Math.PI * 0.9, Math.PI * 2.1);
-      ctx.stroke();
-
-      // Cyber Ear Cups
-      ctx.fillStyle = "#00F2FE";
-      ctx.beginPath();
-      if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(-15, -4, 3.5, 9, 1.5);
-        ctx.roundRect(11.5, -4, 3.5, 9, 1.5);
-      } else {
-        ctx.rect(-15, -4, 3.5, 9);
-        ctx.rect(11.5, -4, 3.5, 9);
-      }
-      ctx.fill();
-
-      ctx.restore();
     }
 
-    // Output Frame
+    // 1. Raycast-Style Outer Glow Ring (Subtle gradient radar sweep)
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate((angle * Math.PI) / 180 + spinAngle);
+
+    const ringGrad = ctx.createConicGradient(0, 0, 0);
+    ringGrad.addColorStop(0, "rgba(0, 242, 254, 0.95)");
+    ringGrad.addColorStop(0.35, "rgba(255, 0, 80, 0.85)");
+    ringGrad.addColorStop(0.7, "rgba(138, 43, 226, 0.4)");
+    ringGrad.addColorStop(1, "rgba(0, 242, 254, 0.05)");
+
+    ctx.strokeStyle = ringGrad;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.arc(0, 0, 13.5, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Ad Skip Action Execution Burst Wave
+    if (isSkipping) {
+      const ringRadius = 13.5 + skipAnimProgress * 8;
+      const ringAlpha = 1 - skipAnimProgress;
+      ctx.strokeStyle = `rgba(255, 0, 80, ${ringAlpha})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, ringRadius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // 2. Dark Slate Rounded Icon Base Card
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.scale(breath * burstScale, breath * burstScale);
+
+    ctx.fillStyle = "#0B0E14";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") {
+      ctx.roundRect(-10.5, -10.5, 21, 21, 5.5);
+    } else {
+      ctx.rect(-10.5, -10.5, 21, 21);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    // 3. Razor-Sharp Geometric Fast-Forward Mark (⏩)
+    // Left Triangle
+    ctx.fillStyle = "#FFFFFF";
+    ctx.beginPath();
+    ctx.moveTo(-6.5, -4.5);
+    ctx.lineTo(-0.5, 0);
+    ctx.lineTo(-6.5, 4.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Right Triangle
+    ctx.beginPath();
+    ctx.moveTo(-0.5, -4.5);
+    ctx.lineTo(5.5, 0);
+    ctx.lineTo(-0.5, 4.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // YouTube Red Precision Accent Bar
+    ctx.fillStyle = "#FF0050";
+    if (typeof ctx.roundRect === "function") {
+      ctx.roundRect(5.5, -4.5, 2, 9, 0.8);
+    } else {
+      ctx.fillRect(5.5, -4.5, 2, 9);
+    }
+    ctx.fill();
+
+    ctx.restore();
+
+    // Output 60 FPS Smooth Frame
     const imageData = ctx.getImageData(0, 0, 32, 32);
     chrome.action.setIcon({ imageData: imageData }, () => {
       if (chrome.runtime.lastError) {}
     });
-
-    frame++;
   } catch (e) {}
 }
 
-setInterval(renderCleanVectorMotionIcon, 90);
+// Smooth 60 FPS (~33ms) Raycast / Linear Micro-Motion Loop
+setInterval(renderRaycastDesignerIcon, 33);
